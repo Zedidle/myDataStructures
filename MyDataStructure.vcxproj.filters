@@ -1,0 +1,93 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="源文件">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="头文件">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="资源文件">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="头文件\Tree">
+      <UniqueIdentifier>{572c69e1-87ae-45f2-b56d-b0e57aa5d28a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\Tree\AVL">
+      <UniqueIdentifier>{4327fb60-90e4-4e62-bd11-d051c80104c9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\Tree\RB">
+      <UniqueIdentifier>{92cc6061-2c08-49cf-ab03-8cd3b0991714}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\Tree\TT">
+      <UniqueIdentifier>{86842e39-329f-4051-acbc-7e82b34d6432}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\Tree\Heap">
+      <UniqueIdentifier>{12618818-b96d-4ab1-a7f2-f1d1d4260f20}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\List">
+      <UniqueIdentifier>{5aa95a36-2b3c-4c2c-ac67-1f8b4bd10b66}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\Stack">
+      <UniqueIdentifier>{60436eaa-9a10-438c-807a-58ef88dc055e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\Queue">
+      <UniqueIdentifier>{488fcf83-4fc7-45c1-a9ab-8f6df2d3009f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\String">
+      <UniqueIdentifier>{4134f63d-7009-4638-b94f-50ef35bb108d}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Main.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Tree\AVL\AVLTree.cpp">
+      <Filter>头文件\Tree\AVL</Filter>
+    </ClCompile>
+    <ClCompile Include="Tree\AVL\AVLTreeNode.cpp">
+      <Filter>头文件\Tree\AVL</Filter>
+    </ClCompile>
+    <ClCompile Include="Tree\Heap\Heap.cpp">
+      <Filter>头文件\Tree\Heap</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Tree\Tree.h">
+      <Filter>头文件\Tree</Filter>
+    </ClInclude>
+    <ClInclude Include="Tree\AVL\AVLTree.h">
+      <Filter>头文件\Tree\AVL</Filter>
+    </ClInclude>
+    <ClInclude Include="Tree\AVL\AVLTreeNode.h">
+      <Filter>头文件\Tree\AVL</Filter>
+    </ClInclude>
+    <ClInclude Include="Tree\Heap\Heap.h">
+      <Filter>头文件\Tree\Heap</Filter>
+    </ClInclude>
+    <ClInclude Include="List\StaticList.h">
+      <Filter>头文件\List</Filter>
+    </ClInclude>
+    <ClInclude Include="Stack\Calculator.h">
+      <Filter>头文件\Stack</Filter>
+    </ClInclude>
+    <ClInclude Include="Queue\LoopQueue.h">
+      <Filter>头文件\Queue</Filter>
+    </ClInclude>
+    <ClInclude Include="Stack\DoubleStack.h">
+      <Filter>头文件\Stack</Filter>
+    </ClInclude>
+    <ClInclude Include="String\String.h">
+      <Filter>头文件\String</Filter>
+    </ClInclude>
+    <ClInclude Include="Tree\ThreadTree.h">
+      <Filter>头文件\Tree</Filter>
+    </ClInclude>
+    <ClInclude Include="Tree\HuffmanTree.h">
+      <Filter>头文件\Tree</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
