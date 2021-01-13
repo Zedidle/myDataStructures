@@ -144,6 +144,7 @@
     <ClCompile Include="Tree\Heap\Heap.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Graph\AdjacencyMatrix.h" />
     <ClInclude Include="List\StaticList.h" />
     <ClInclude Include="Queue\LoopQueue.h" />
     <ClInclude Include="Stack\Calculator.h" />

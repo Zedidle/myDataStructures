@@ -40,6 +40,9 @@
     <Filter Include="头文件\String">
       <UniqueIdentifier>{4134f63d-7009-4638-b94f-50ef35bb108d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="头文件\Graph">
+      <UniqueIdentifier>{469a1caf-449c-4519-9de2-d3ebeda00ba9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -88,6 +91,9 @@
     </ClInclude>
     <ClInclude Include="Tree\HuffmanTree.h">
       <Filter>头文件\Tree</Filter>
+    </ClInclude>
+    <ClInclude Include="Graph\AdjacencyMatrix.h">
+      <Filter>头文件\Graph</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

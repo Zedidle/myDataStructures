@@ -12,11 +12,14 @@
 
 #include "String/String.h"
 
+
+#include "Graph/AdjacencyMatrix.h"
+
 int main() {
 	//TreeTest();
 	//ThreadTree_Test();
 	//Huffman::Test();
-	Huffman::Test1();
+	//Huffman::Test1();
 
 	//StaticList::Test();
 
@@ -33,6 +36,16 @@ int main() {
 
 	// String
 	//String::Test();
+
+
+	// Graph
+	//AdjacencyMatrix::Test();
+	//AdjacencyMatrix::Test1();
+	//AdjacencyMatrix::Test2();
+	//AdjacencyMatrix::Test3();
+	//AdjacencyMatrix::Test4();
+	AdjacencyMatrix::Test5();
+
 
 
 	return 0;
