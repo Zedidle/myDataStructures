@@ -427,4 +427,117 @@ namespace AdjacencyMatrix {
 	}
 
 
+
+	// ============================================
+	// 最短路径
+	// 迪杰斯特拉算法
+	typedef vector<int> Pathmatrix, ShortPathTable;
+	#define MAXVEX 9
+	struct MGraph {
+		MGraph(const vector<vector<int>> &Gra){
+			numVertexes = Gra.size();
+			matirx = Gra;
+			for (auto &g : matirx) {
+				for (int& i : g) {
+					if(i == -1) i = INFINITY;
+				}
+			}
+		}
+		int numVertexes;
+		vector<vector<int>> matirx;
+	};
+
+
+
+
+	void ShortestPath_Dijkstra(MGraph G, int v0, Pathmatrix& P, ShortPathTable& D) {
+		int v, w, k, m;
+		vector<bool> F(MAXVEX, false);  // 记录 是否已经找到起点到某点的最短距离；
+		
+		// 起点初始化
+		for (v = 0; v < G.numVertexes; v++) {
+			D[v] = G.matirx[v0][v]; // 将v0点有连线的顶点加上权值；
+			P[v] = 0; // 初始化路径数组 结果..
+		}
+		D[v0] = 0;  // 在当前探索范围下，v0 - v0 的最短距离为 0，自己到自己；
+		F[v0] = true; // v0 - v0 的最短距离已经找到；（如果确定已经是最短路径，并弹出）
+
+
+		// 开始主循环，每轮都能求得在已有条件下，v0到所有顶点的最短路径；（随着每一轮，进入探索范围的边也在增多）
+		for (v = 1; v < G.numVertexes; v++) {
+			m = INFINITY;
+			for (w = 0; w < G.numVertexes; w++) {
+				// !F[w] 是如何确定的？
+				// 找到当前条件下的最优选择
+				if (!F[w] && D[w] < m) {
+					m  = D[w];
+					k = w;
+				}
+			}
+			F[k] = true; // 将目前找到的最近的 k 顶点设为 1; 为何这样就能确定下来？ 因为每次走一步，走的都是当时那个点的最短路径，是已经确定了才走的；
+			for (w = 0; w < G.numVertexes; w++) {  // 修正当前最短路径及距离；
+				if (!F[w] && (m + G.matirx[k][w] < D[w])) {
+					// 如果经过 v 顶点的路径比现在这条路径的长度短的话；
+					D[w] = m + G.matirx[k][w];
+					P[w] = k;
+				}
+			}
+			//cout << endl << endl;
+			//cout << "m, k: " << m << ", " << k << endl;
+			//cout << "D: ";
+			//for (auto d : D) cout << d << " ";
+			//cout << endl;
+			//cout << "P: ";
+			//for (auto p : P) cout << p << " ";
+			//cout << endl;
+			//cout << "F: ";
+			//for (auto f : F) cout << f << " ";
+
+		}
+	}
+
+
+	void Test6() {
+
+		vector<vector<int>> Gra = {
+			{0, 1, 5, -1, -1, -1, -1, -1, -1},
+			{1, 0, 3, 7, 5, -1, -1, -1, -1},
+			{5, 3, 0, -1, 1, 7, -1, -1, -1},
+			{-1, 7, -1, 0, 2, -1, 3, -1, -1},
+			{-1, 5, 1, 2, 0, 3, 6, 9, -1},
+			{-1, -1, 7, -1, 3, 0, -1, 5, -1},
+			{-1, -1, -1, 3, 6, -1, 0, 2, 7},
+			{-1, -1, -1, -1, 9, 5, 2, 0, 4},
+			{-1, -1, -1, -1, -1, -1, 7, 4, 0}
+		};
+
+		MGraph G(Gra);
+		Pathmatrix P(MAXVEX);
+		ShortPathTable D(MAXVEX);
+		ShortestPath_Dijkstra(G, 0, P, D);
+		cout << endl;
+		cout << endl;
+		cout << "到达 i位置的前一个位置：" << endl;
+		for (int i = 0; i < P.size(); i++) {
+			cout << i << ":" << P[i] << "  ";
+		}
+		string ans = "";
+		int end = 8, start = 0;
+		int cur = end;
+		while (cur!=start) {
+			ans = "->" + to_string(cur) + ans;
+			cur = P[cur];
+		}
+		cout << endl << "ans: " << to_string(start) + ans <<endl;
+
+		cout << endl;
+		cout << "起点到每个点的最短距离：" << endl;
+		for (int i = 0; i < D.size(); i++) {
+			cout << D[i] << " ";
+		}
+		cout << endl;
+	}
+
+
+
 }
