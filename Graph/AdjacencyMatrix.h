@@ -450,52 +450,38 @@ namespace AdjacencyMatrix {
 
 
 
-	void ShortestPath_Dijkstra(MGraph G, int v0, Pathmatrix& P, ShortPathTable& D) {
-		int v, w, k, m;
-		vector<bool> F(MAXVEX, false);  // 记录 是否已经找到起点到某点的最短距离；
-		
-		// 起点初始化
-		for (v = 0; v < G.numVertexes; v++) {
-			D[v] = G.matirx[v0][v]; // 将v0点有连线的顶点加上权值；
-			P[v] = 0; // 初始化路径数组 结果..
+
+
+
+	void My_Dijkstra(MGraph G, int v0, Pathmatrix& P, ShortPathTable& D) {
+		vector<vector<int>> Gra = G.matirx;
+		int len = Gra.size();
+		vector<bool> F(len, false);
+		int v, k, w, m;
+		for (v = 0; v < len; v++) {
+			D[v] = Gra[v0][v];
+			P[v] = v0;
 		}
-		D[v0] = 0;  // 在当前探索范围下，v0 - v0 的最短距离为 0，自己到自己；
-		F[v0] = true; // v0 - v0 的最短距离已经找到；（如果确定已经是最短路径，并弹出）
+		F[v0] = true;
 
-
-		// 开始主循环，每轮都能求得在已有条件下，v0到所有顶点的最短路径；（随着每一轮，进入探索范围的边也在增多）
-		for (v = 1; v < G.numVertexes; v++) {
+		for (v = 1; v < len; v++) {
 			m = INFINITY;
-			for (w = 0; w < G.numVertexes; w++) {
-				// !F[w] 是如何确定的？
-				// 找到当前条件下的最优选择
+			for (w = 0; w < len; w++) {
 				if (!F[w] && D[w] < m) {
-					m  = D[w];
+					m = D[w];
 					k = w;
 				}
 			}
-			F[k] = true; // 将目前找到的最近的 k 顶点设为 1; 为何这样就能确定下来？ 因为每次走一步，走的都是当时那个点的最短路径，是已经确定了才走的；
-			for (w = 0; w < G.numVertexes; w++) {  // 修正当前最短路径及距离；
-				if (!F[w] && (m + G.matirx[k][w] < D[w])) {
-					// 如果经过 v 顶点的路径比现在这条路径的长度短的话；
-					D[w] = m + G.matirx[k][w];
+			F[k] = true;
+			for (w = 0; w < len; w++) {
+				if (!F[w] && (m + Gra[k][w] < D[w])) {
+					D[w] = m + Gra[k][w];
 					P[w] = k;
 				}
 			}
-			//cout << endl << endl;
-			//cout << "m, k: " << m << ", " << k << endl;
-			//cout << "D: ";
-			//for (auto d : D) cout << d << " ";
-			//cout << endl;
-			//cout << "P: ";
-			//for (auto p : P) cout << p << " ";
-			//cout << endl;
-			//cout << "F: ";
-			//for (auto f : F) cout << f << " ";
-
 		}
-	}
 
+	}
 
 	void Test6() {
 
@@ -514,7 +500,8 @@ namespace AdjacencyMatrix {
 		MGraph G(Gra);
 		Pathmatrix P(MAXVEX);
 		ShortPathTable D(MAXVEX);
-		ShortestPath_Dijkstra(G, 0, P, D);
+		int end = 8, start = 1;
+		My_Dijkstra(G, start, P, D);
 		cout << endl;
 		cout << endl;
 		cout << "到达 i位置的前一个位置：" << endl;
@@ -522,7 +509,6 @@ namespace AdjacencyMatrix {
 			cout << i << ":" << P[i] << "  ";
 		}
 		string ans = "";
-		int end = 8, start = 0;
 		int cur = end;
 		while (cur!=start) {
 			ans = "->" + to_string(cur) + ans;
