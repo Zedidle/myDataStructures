@@ -430,6 +430,19 @@ namespace AdjacencyMatrix {
 
 	// ============================================
 	// 最短路径
+
+	vector<vector<int>> Gra = {
+		{0, 1, 5, -1, -1, -1, -1, -1, -1},
+		{1, 0, 3, 7, 5, -1, -1, -1, -1},
+		{5, 3, 0, -1, 1, 7, -1, -1, -1},
+		{-1, 7, -1, 0, 2, -1, 3, -1, -1},
+		{-1, 5, 1, 2, 0, 3, 6, 9, -1},
+		{-1, -1, 7, -1, 3, 0, -1, 5, -1},
+		{-1, -1, -1, 3, 6, -1, 0, 2, 7},
+		{-1, -1, -1, -1, 9, 5, 2, 0, 4},
+		{-1, -1, -1, -1, -1, -1, 7, 4, 0}
+	};
+
 	// 迪杰斯特拉算法
 	typedef vector<int> Pathmatrix, ShortPathTable;
 	#define MAXVEX 9
@@ -447,24 +460,22 @@ namespace AdjacencyMatrix {
 		vector<vector<int>> matirx;
 	};
 
-
-
-
-
-
-
 	void My_Dijkstra(MGraph G, int v0, Pathmatrix& P, ShortPathTable& D) {
 		vector<vector<int>> Gra = G.matirx;
 		int len = Gra.size();
 		vector<bool> F(len, false);
 		int v, k, w, m;
+		// 初始化
 		for (v = 0; v < len; v++) {
 			D[v] = Gra[v0][v];
 			P[v] = v0;
 		}
 		F[v0] = true;
 
+
+		// 大循环
 		for (v = 1; v < len; v++) {
+			// 小循环1：确定当前最短边及其下标
 			m = INFINITY;
 			for (w = 0; w < len; w++) {
 				if (!F[w] && D[w] < m) {
@@ -473,34 +484,24 @@ namespace AdjacencyMatrix {
 				}
 			}
 			F[k] = true;
+			// 小循环2：刷新起点到所有点的最短距离及前驱
 			for (w = 0; w < len; w++) {
 				if (!F[w] && (m + Gra[k][w] < D[w])) {
-					D[w] = m + Gra[k][w];
+					D[w] = m+Gra[k][w];
 					P[w] = k;
 				}
 			}
 		}
-
 	}
+
 
 	void Test6() {
 
-		vector<vector<int>> Gra = {
-			{0, 1, 5, -1, -1, -1, -1, -1, -1},
-			{1, 0, 3, 7, 5, -1, -1, -1, -1},
-			{5, 3, 0, -1, 1, 7, -1, -1, -1},
-			{-1, 7, -1, 0, 2, -1, 3, -1, -1},
-			{-1, 5, 1, 2, 0, 3, 6, 9, -1},
-			{-1, -1, 7, -1, 3, 0, -1, 5, -1},
-			{-1, -1, -1, 3, 6, -1, 0, 2, 7},
-			{-1, -1, -1, -1, 9, 5, 2, 0, 4},
-			{-1, -1, -1, -1, -1, -1, 7, 4, 0}
-		};
 
 		MGraph G(Gra);
 		Pathmatrix P(MAXVEX);
 		ShortPathTable D(MAXVEX);
-		int end = 8, start = 1;
+		int end = 8, start = 0;
 		My_Dijkstra(G, start, P, D);
 		cout << endl;
 		cout << endl;
@@ -526,4 +527,55 @@ namespace AdjacencyMatrix {
 
 
 
+	typedef vector<vector<int>> Pathmatrix2, ShortPathTable2;
+
+	void My_Floyd(MGraph G) {
+		int v, w, k;
+		Pathmatrix2 D = G.matirx;
+		vector<int> p(D.size());
+		for (int i = 0; i < D.size(); i++) {
+			p[i] = i; // 意思是自己到达自己，自己的前驱就是自己
+		}
+		ShortPathTable2 P(G.numVertexes, p);
+		for (k = 0; k < G.numVertexes; ++k) {
+			for (v = 0; v < G.numVertexes; ++v) {
+				for (w = 0; w < G.numVertexes; ++w) {
+					if (D[v][w] > D[v][k] + D[k][w]) {
+						D[v][w] = D[v][k] + D[k][w];
+						P[v][w] = P[v][k]; // 前驱的改变由此时最短路径决定
+					}
+				}
+			}
+		}
+
+		cout <<endl;
+		for (v = 0; v < G.numVertexes; ++v) {
+			for (w = 0; w < G.numVertexes; w++) {
+				cout << P[v][w] <<" ";
+			}
+			cout << endl;
+		}
+		cout <<endl;
+
+		// 显示
+		for (v = 0; v < G.numVertexes; ++v) {
+			for (w = v + 1; w < G.numVertexes; w++) {
+				printf("v%d-v%d weight: %d ", v, w, D[v][w]);
+				k=P[v][w];
+				printf(" path: %d", v);
+				while (k != w) {
+					printf(" -> %d", k);
+					k = P[k][w];
+				}
+				printf(" -> %d\n", w);
+			}
+			printf("\n");
+		}
+	}
+
+	// 弗洛伊德算法
+	void Test7() {
+		MGraph G(Gra);
+		My_Floyd(G);
+	}
 }

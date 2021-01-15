@@ -45,7 +45,8 @@ int main() {
 	//AdjacencyMatrix::Test3();
 	//AdjacencyMatrix::Test4();
 	//AdjacencyMatrix::Test5();
-	AdjacencyMatrix::Test6();
+	//AdjacencyMatrix::Test6();
+	AdjacencyMatrix::Test7();
 
 
 
