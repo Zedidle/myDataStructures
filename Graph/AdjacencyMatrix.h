@@ -1,7 +1,7 @@
 #include "iostream"
 using namespace std;
 #include "vector"
-
+#include "stack"
 
 
 #define MAXVEX 100
@@ -460,6 +460,42 @@ namespace AdjacencyMatrix {
 		vector<vector<int>> matirx;
 	};
 
+
+
+	void Dijkstra(MGraph G, int v0, Pathmatrix& P, ShortPathTable& D) {
+		vector<vector<int>> Gra = G.matirx;
+		int len = Gra.size();
+		vector<bool> F(len);
+
+		int v, w, k ,m;
+		for (v = 0; v < len; v++) {
+			D[v] = Gra[v0][v];
+			P[v] = v0;
+		}
+		F[v0] = true;
+
+
+		for (v = 1; v < len; v++) {
+			m = INFINITY;
+			for (w = 0; w < len; w++) {
+				if (!F[w] && D[w] < m) {  // 所有寻路都会有这个特点：“选当前的最优解”
+					m = D[w];
+					k = w;
+				}
+			}
+			for (w = 0; w < len; w++) {
+				if (!F[w] && m + Gra[k][w] < D[w]) {
+					D[w] = m + Gra[k][w];
+					P[w] = k;
+				}
+			}
+
+			F[k] = true;
+		}
+
+	}
+
+
 	void My_Dijkstra(MGraph G, int v0, Pathmatrix& P, ShortPathTable& D) {
 		vector<vector<int>> Gra = G.matirx;
 		int len = Gra.size();
@@ -475,7 +511,7 @@ namespace AdjacencyMatrix {
 
 		// 大循环
 		for (v = 1; v < len; v++) {
-			// 小循环1：确定当前最短边及其下标
+			// 小循环1：获取当前最短边及其下标；
 			m = INFINITY;
 			for (w = 0; w < len; w++) {
 				if (!F[w] && D[w] < m) {
@@ -484,9 +520,9 @@ namespace AdjacencyMatrix {
 				}
 			}
 			F[k] = true;
-			// 小循环2：刷新起点到所有点的最短距离及前驱
+			// 小循环2：刷新起点到所有点的最短距离及前驱；
 			for (w = 0; w < len; w++) {
-				if (!F[w] && (m + Gra[k][w] < D[w])) {
+				if (!F[w] && (m + Gra[k][w] < D[w])) {  // 当前点有通路的话，就会刷新；
 					D[w] = m+Gra[k][w];
 					P[w] = k;
 				}
@@ -496,13 +532,11 @@ namespace AdjacencyMatrix {
 
 
 	void Test6() {
-
-
 		MGraph G(Gra);
 		Pathmatrix P(MAXVEX);
 		ShortPathTable D(MAXVEX);
 		int end = 8, start = 0;
-		My_Dijkstra(G, start, P, D);
+		Dijkstra(G, start, P, D);
 		cout << endl;
 		cout << endl;
 		cout << "到达 i位置的前一个位置：" << endl;
@@ -542,7 +576,7 @@ namespace AdjacencyMatrix {
 				for (w = 0; w < G.numVertexes; ++w) {
 					if (D[v][w] > D[v][k] + D[k][w]) {
 						D[v][w] = D[v][k] + D[k][w];
-						P[v][w] = P[v][k]; // 前驱的改变由此时最短路径决定
+						P[v][w] = P[v][k];
 					}
 				}
 			}
@@ -572,10 +606,113 @@ namespace AdjacencyMatrix {
 			printf("\n");
 		}
 	}
-
 	// 弗洛伊德算法
 	void Test7() {
 		MGraph G(Gra);
 		My_Floyd(G);
 	}
+
+
+
+
+	// ==================================
+	// 拓扑排序
+	struct TP_Sise {
+		TP_Sise(int adj) :adjvex(adj) {}
+		int adjvex;
+		TP_Sise* next;
+	};
+
+	struct TP_Vex {
+		TP_Vex(int d):data(d) {}
+		int In = 0;
+		int data;
+		TP_Sise* firstedge = nullptr;
+	};
+
+	void TP_Sort(int num_vex, const vector<pair<int, int>> & sides) {
+		vector<TP_Vex*> tp_vexs(num_vex);
+		for (int i = 0; i < num_vex; i++) {
+			tp_vexs[i] = new TP_Vex(i);
+		}
+		TP_Vex* v;
+		TP_Sise* s;
+		for (auto side : sides) {
+			v = tp_vexs[side.first];
+			s = new TP_Sise(side.second);
+			s->next = v->firstedge;
+			v->firstedge = s;
+			tp_vexs[side.second]->In ++ ;
+		}
+		v = nullptr, s = nullptr;
+		delete v, s;
+
+		// 检查点集和编辑状态
+		//for (auto vex : tp_vexs) {
+		//	cout << "In:" << vex->In << ", " << "vex->data:" << vex->data << ": ";
+		//	s = vex->firstedge;
+		//	while (s != nullptr) {
+		//		cout << s->adjvex << " ";
+		//		s = s->next;
+		//	}
+		//	cout << endl;
+		//}
+
+		stack<TP_Vex*> stac;
+		for (auto &vex : tp_vexs) {
+			if (vex->In == 0) {
+				stac.push(vex);
+			}
+		}
+		
+		vector<TP_Vex> path_result;
+		int i = 0;
+		while (stac.size()) {
+			v = stac.top();
+			s = v->firstedge;
+			stac.pop();
+			path_result.push_back(*v);
+			while (s != nullptr) {
+				i = s->adjvex;
+				tp_vexs[i]->In--;
+				if (tp_vexs[i]->In == 0) {
+					stac.push(tp_vexs[i]);
+				}
+				s = s->next;
+			}
+		}
+		v = nullptr, s = nullptr;
+		delete v, s;
+		cout << endl;
+		for (auto p : path_result) {
+			cout << p.data << " ";
+		}
+		cout << endl;
+
+	}
+
+	void Test8() {
+		int Num_Vex = 14;
+		vector<pair<int, int>> Sides = {
+			{0, 11}, {0, 5}, {0, 4},
+			{1, 8},{1, 4},{1, 2},
+			{2, 9},{2, 6},{2, 5},
+			{3, 13},{3, 2},
+			{4, 7},
+			{5, 12},{5, 8},
+			{6, 5},
+			{8, 7},
+			{9, 11},{9, 10},
+			{10, 13},
+			{12, 9},
+		};
+		TP_Sort(Num_Vex, Sides);
+	}
+
+
+	// 关键路径算法
+	void Test9() {
+
+	}
+
 }

@@ -73,11 +73,8 @@ void AVLTree<T>::erase(T value) {
 			indirect = &((*indirect)->right);
 	}
 
-	if (*indirect == nullptr)  // the value does not exist in tree
-		return;  // may be raising an Exception is more elegant
-
-	else
-		path.push_back(indirect);
+	if (*indirect == nullptr) return;
+	path.push_back(indirect);
 
 	std::size_t index = path.size();
 

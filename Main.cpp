@@ -12,8 +12,10 @@
 
 #include "String/String.h"
 
-
 #include "Graph/AdjacencyMatrix.h"
+
+#include "Hash/HashMap.h"
+
 
 int main() {
 	//TreeTest();
@@ -45,10 +47,12 @@ int main() {
 	//AdjacencyMatrix::Test3();
 	//AdjacencyMatrix::Test4();
 	//AdjacencyMatrix::Test5();
-	//AdjacencyMatrix::Test6();
-	AdjacencyMatrix::Test7();
+	AdjacencyMatrix::Test6();
+	//AdjacencyMatrix::Test7();
+	//AdjacencyMatrix::Test8();
 
 
+	//HashMap::Test();
 
 	return 0;
 }

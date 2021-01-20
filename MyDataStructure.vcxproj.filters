@@ -43,6 +43,9 @@
     <Filter Include="头文件\Graph">
       <UniqueIdentifier>{469a1caf-449c-4519-9de2-d3ebeda00ba9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="头文件\Hash">
+      <UniqueIdentifier>{97d13fe4-81c3-4465-9584-6139930a0865}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -94,6 +97,9 @@
     </ClInclude>
     <ClInclude Include="Graph\AdjacencyMatrix.h">
       <Filter>头文件\Graph</Filter>
+    </ClInclude>
+    <ClInclude Include="Hash\HashMap.h">
+      <Filter>头文件\Hash</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
