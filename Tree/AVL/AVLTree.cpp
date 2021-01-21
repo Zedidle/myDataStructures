@@ -1,6 +1,8 @@
 //  Created by Kadir Emre Oto on 06.08.2018.
 
 #include "AVLTree.h"
+#include "queue"
+using namespace std;
 
 template <class T>
 AVLTree<T>::AVLTree() {
@@ -14,143 +16,139 @@ AVLTree<T>::~AVLTree() {
 }
 
 template <class T>
-void AVLTree<T>::clear() {
-	std::vector<AVLTreeNode<T>*> stack;
-
-	if (root != nullptr)
-		stack.push_back(root);
+void AVLTree<T>::clear() { // 按独立层删除
+	queue<AVLTreeNode<T>*> stack;
+	if(root == nullptr) return;
+	stack.push(root);
 
 	while (!stack.empty()) {
-		AVLTreeNode<T>* node = stack.back();
-		stack.pop_back();
+		AVLTreeNode<T>* node = stack.front();
+		stack.pop();
 
-		if (node->left != nullptr)
-			stack.push_back(node->left);
-
-		if (node->right != nullptr)
-			stack.push_back(node->right);
-
+		if (node->left != nullptr) stack.push(node->left);
+		if (node->right != nullptr) stack.push(node->right);
 		_size--;
 		delete node;
 	}
-
 	root = nullptr;
 }
 
 template <class T>
 void AVLTree<T>::insert(T value) {
-	AVLTreeNode<T>** indirect = &root;  // to generalize insertion
-	std::vector<AVLTreeNode<T>**> path;  // to update height values
-
-	// indirect， 双指针
-	while (*indirect != nullptr) { // 当前值为nullptr
-		path.push_back(indirect);
-
-		if ((*indirect)->value > value)
-			indirect = &((*indirect)->left);
-		else
-			indirect = &((*indirect)->right);
+	vector<AVLTreeNode<T>**> path;
+	AVLTreeNode<T>** node = &root;
+	while ((*node) != nullptr) {
+		path.push_back(node);
+		if ((*node)->value > value) {
+			node = &((*node)->left);
+		}
+		else {
+			node = &((*node)->right);
+		}
 	}
-
-	*indirect = new AVLTreeNode<T>(value);
-	path.push_back(indirect);
-
+	*node = new AVLTreeNode<T>(value);
+	path.push_back(node);
 	balance(path);
-	_size++;
+	_size ++ ;
 }
 
+/*	erase 的步骤：
+	1.	确定删除点 I 并设左右子树分别为 IL, IR；
+	2.	判断 IL 和 IR 的状态：
+			1）都为空，可直接删除 I ；
+			2）IR 为空：可直接删除 I ，并让IL代替自己；
+			3）IR 不为空：找到 IR 中的最小左结点 S， 还有如下情况：
+				① 若 S 不存在，则让 IR替换掉I；
+				② 否则，设S的右结点为SR（没有左节点）、S的父节点为SP，则SP的左节点为SR； 然后将S替换掉I；  
+*/
 template <class T>
 void AVLTree<T>::erase(T value) {
-	AVLTreeNode<T>** indirect = &root;  // to generalize insertion
-	std::vector<AVLTreeNode<T>**> path;  // to update height values
-
-	while (*indirect != nullptr and (*indirect)->value != value) {
-		path.push_back(indirect);
-
-		if ((*indirect)->value > value)
-			indirect = &((*indirect)->left);
-		else
-			indirect = &((*indirect)->right);
+	AVLTreeNode<T>** I = &root;
+	vector<AVLTreeNode<T>**> path;
+	while (*I != nullptr and (*I)->value != value) {
+		path.push_back(I);
+		if ((*I)->value > value) {
+			I = &((*I)->left);
+		}
+		else {
+			I = &((*I)->right);
+		}
 	}
 
-	if (*indirect == nullptr) return;
-	path.push_back(indirect);
+	if(*I == nullptr) return;
+	int index = path.size();
 
-	std::size_t index = path.size();
+	AVLTreeNode<T> *IL = (*I)->left, *IR = (*I)->right;
 
-	if ((*indirect)->left == nullptr and (*indirect)->right == nullptr) {  // the node is leaf
-		delete* indirect;  // just delete node
-		*indirect = nullptr;
-		path.pop_back();  // pop the deleted node from path
+	if (IL == nullptr && IR == nullptr) {
+		delete *I;
+		*I = nullptr;
 	}
-
-	else if ((*indirect)->right == nullptr) {  // only left child exists
-		AVLTreeNode<T>* toRemove = *indirect;
-
-		(*indirect) = (*indirect)->left;
+	else if (IR == nullptr) {
+		AVLTreeNode<T>* toRemove = *I;
+		(*I) = (*I)->left;
 		delete toRemove;
-
-		path.pop_back();
 	}
+	else {
+		path.push_back(I);
 
-	else {  // right child exists
-		AVLTreeNode<T>** successor = &((*indirect)->right);
-
-		while ((*successor)->left != nullptr) {
-			path.push_back(successor);
-			successor = &((*successor)->left);
+		AVLTreeNode<T>** S = &IR;
+		while ((*S)->left != nullptr) {
+			path.push_back(S);
+			S = &((*S)->left);
 		}
 
-		if (*successor == (*indirect)->right) {
-			(*successor)->left = (*indirect)->left;
-
-			AVLTreeNode<T>* toRemove = *indirect;
-			*indirect = *successor;
+		if (*S == IR) {
+			(*S)->left = (*I)->left;
+			AVLTreeNode<T>* toRemove = *I;
+			*I = *S;
 			delete toRemove;
 		}
-
 		else {
-			AVLTreeNode<T>* tmp = *path.back(), * suc = *successor;
+			AVLTreeNode<T>* p = *path.back(), *s = *S;
 
-			tmp->left = (*successor)->right;
-			suc->left = (*indirect)->left;
-			suc->right = (*indirect)->right;
+			p->left = (*S)->right;
+			s->left = (*I)->left;
+			s->right = (*I)->right;
 
-			delete* indirect;
-			*indirect = suc;
-			path[index] = &(suc->right);
+			delete *I;
+			*I = s;
+			path[index] = &(s->right);
 		}
 	}
+	IL = IR = nullptr;
+	delete IL, IR, I;
 
 	balance(path);
-	_size--;
+	_size --;
 }
 
 template <class T>
-void AVLTree<T>::balance(std::vector<AVLTreeNode<T>**> path) {  // starting from root
-	std::reverse(path.begin(), path.end()); // why reverse?  Bacause updateValues after;
+void AVLTree<T>::balance(vector<AVLTreeNode<T>**> path) {
+	reverse(path.begin(), path.end());
+	
+	for (auto node : path) {
+		(*node)->updateValues();
 
-	for (auto indirect : path) {
-		(*indirect)->updateValues(); // 更新路径数据
-
-		if ((*indirect)->balanceFactor() >= 2){
-			if((*indirect)->left->balanceFactor() >= 0){   // left - left
-				*indirect = (*indirect)->right_rotate();
+		if ((*node)->balanceFactor() >= 2) {
+			if ((*node)->left->balanceFactor() > 0) {  // LL
+				*node = (*node)->right_rotate();
 			}
-			else {	 // left - right
-				(*indirect)->left = (*indirect)->left->left_rotate();
-				*indirect = (*indirect)->right_rotate();
+			else {  // LR
+				(*node)->left = (*node)->left->left_rotate();
+				*node = (*node)->right_rotate();
 			}
 		}
-		else if ((*indirect)->balanceFactor() <= -2){  // right - right
-			if ((*indirect)->right->balanceFactor() <= 0) {
-				*indirect = (*indirect)->left_rotate();
+		else if ((*node)->balanceFactor() <= -2) {
+			if ((*node)->right->balanceFactor() < 0) { // RR
+				*node = (*node)->left_rotate();
 			}
-			else {	 // right - left
-				(*indirect)->right = ((*indirect)->right)->right_rotate();
-				*indirect = (*indirect)->left_rotate();
+			else {  // RL
+				(*node)->right = (*node)->right->right_rotate();
+				*node = (*node)->left_rotate();
 			}
 		}
+
 	}
 }
 

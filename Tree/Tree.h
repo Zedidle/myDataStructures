@@ -3,27 +3,24 @@
 #include <iostream>
 #include "AVL/AVLTree.h"
 #include "Heap/Heap.h"
-
+using namespace std;
 
 void AVLTest() {
-	AVLTree<std::string> tree;
-
-	tree.insert("Emre");
-	tree.insert("KEO");
-	tree.insert("Kadir");
-	tree.insert("Oto");
-	tree.insert("Oto0");
-	tree.insert("kisd");
-	tree.insert("Ofdg");
-	tree.insert("sdf0");
-	tree.insert("d2wgf");
-	tree.insert("b000");
-	tree.insert("jgm4");
-	tree.insert("vmda");
-	tree.insert("flam");
-	tree.insert("0kd");
-
+	AVLTree<string> tree;
+	vector<string> elements = { "Emre" , "KEO", "Kadir", "Oto", "Oto0", "kisd", "Ofdg", "sdf0", "d2wgf" };
+	for (auto e : elements) {
+		tree.insert(e);
+	}
 	tree.display();
+	//tree.clear();
+	vector<string> elements2 = { "Emre" , "KEO", "Kadir" };
+	for (auto e : elements2) {
+		
+		cout << endl << "erase: " << e << endl;
+		tree.erase(e);
+		tree.display();
+	}
+	//tree.display();
 }
 
 

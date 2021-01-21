@@ -157,6 +157,8 @@
     <ClInclude Include="Tree\HuffmanTree.h" />
     <ClInclude Include="Tree\ThreadTree.h" />
     <ClInclude Include="Tree\Tree.h" />
+    <ClInclude Include="Tree\TwoThreeFourTree.h" />
+    <ClInclude Include="Tree\TwoThreeTree.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

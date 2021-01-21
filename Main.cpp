@@ -18,6 +18,8 @@
 
 
 int main() {
+	AVLTest();
+	
 	//TreeTest();
 	//ThreadTree_Test();
 	//Huffman::Test();
@@ -47,7 +49,7 @@ int main() {
 	//AdjacencyMatrix::Test3();
 	//AdjacencyMatrix::Test4();
 	//AdjacencyMatrix::Test5();
-	AdjacencyMatrix::Test6();
+	//AdjacencyMatrix::Test6();
 	//AdjacencyMatrix::Test7();
 	//AdjacencyMatrix::Test8();
 

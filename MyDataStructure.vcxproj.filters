@@ -22,9 +22,6 @@
     <Filter Include="头文件\Tree\RB">
       <UniqueIdentifier>{92cc6061-2c08-49cf-ab03-8cd3b0991714}</UniqueIdentifier>
     </Filter>
-    <Filter Include="头文件\Tree\TT">
-      <UniqueIdentifier>{86842e39-329f-4051-acbc-7e82b34d6432}</UniqueIdentifier>
-    </Filter>
     <Filter Include="头文件\Tree\Heap">
       <UniqueIdentifier>{12618818-b96d-4ab1-a7f2-f1d1d4260f20}</UniqueIdentifier>
     </Filter>
@@ -100,6 +97,12 @@
     </ClInclude>
     <ClInclude Include="Hash\HashMap.h">
       <Filter>头文件\Hash</Filter>
+    </ClInclude>
+    <ClInclude Include="Tree\TwoThreeTree.h">
+      <Filter>头文件\Tree</Filter>
+    </ClInclude>
+    <ClInclude Include="Tree\TwoThreeFourTree.h">
+      <Filter>头文件\Tree</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
