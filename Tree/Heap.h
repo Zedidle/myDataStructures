@@ -1,13 +1,7 @@
-//  Created by Kadir Emre Oto on 06.08.2018.
-
-#define AVLTree_hpp
-
 #include <string>
 #include <iostream>
 #include <algorithm>
 using namespace std;
-
-
 
 
 namespace TreeHead {

@@ -19,12 +19,6 @@
     <Filter Include="头文件\Tree\AVL">
       <UniqueIdentifier>{4327fb60-90e4-4e62-bd11-d051c80104c9}</UniqueIdentifier>
     </Filter>
-    <Filter Include="头文件\Tree\RB">
-      <UniqueIdentifier>{92cc6061-2c08-49cf-ab03-8cd3b0991714}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="头文件\Tree\Heap">
-      <UniqueIdentifier>{12618818-b96d-4ab1-a7f2-f1d1d4260f20}</UniqueIdentifier>
-    </Filter>
     <Filter Include="头文件\List">
       <UniqueIdentifier>{5aa95a36-2b3c-4c2c-ac67-1f8b4bd10b66}</UniqueIdentifier>
     </Filter>
@@ -54,8 +48,11 @@
     <ClCompile Include="Tree\AVL\AVLTreeNode.cpp">
       <Filter>头文件\Tree\AVL</Filter>
     </ClCompile>
-    <ClCompile Include="Tree\Heap\Heap.cpp">
-      <Filter>头文件\Tree\Heap</Filter>
+    <ClCompile Include="Tree\TwoTreeTree.cpp">
+      <Filter>头文件\Tree</Filter>
+    </ClCompile>
+    <ClCompile Include="Tree\RedBlackTree.cpp">
+      <Filter>头文件\Tree</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -67,9 +64,6 @@
     </ClInclude>
     <ClInclude Include="Tree\AVL\AVLTreeNode.h">
       <Filter>头文件\Tree\AVL</Filter>
-    </ClInclude>
-    <ClInclude Include="Tree\Heap\Heap.h">
-      <Filter>头文件\Tree\Heap</Filter>
     </ClInclude>
     <ClInclude Include="List\StaticList.h">
       <Filter>头文件\List</Filter>
@@ -102,6 +96,12 @@
       <Filter>头文件\Tree</Filter>
     </ClInclude>
     <ClInclude Include="Tree\TwoThreeFourTree.h">
+      <Filter>头文件\Tree</Filter>
+    </ClInclude>
+    <ClInclude Include="Tree\Heap.h">
+      <Filter>头文件\Tree</Filter>
+    </ClInclude>
+    <ClInclude Include="Tree\RedBlackTree.h">
       <Filter>头文件\Tree</Filter>
     </ClInclude>
   </ItemGroup>

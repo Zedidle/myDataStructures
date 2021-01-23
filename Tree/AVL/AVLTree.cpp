@@ -79,7 +79,6 @@ void AVLTree<T>::erase(T value) {
 	int index = path.size();
 
 	AVLTreeNode<T> *IL = (*I)->left, *IR = (*I)->right;
-
 	if (IL == nullptr && IR == nullptr) {
 		delete *I;
 		*I = nullptr;

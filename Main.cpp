@@ -1,7 +1,4 @@
-#include <iostream>
 #include "Tree/Tree.h"
-#include "Tree/ThreadTree.h"
-#include "Tree/HuffmanTree.h"
 
 #include "List/StaticList.h"
 
@@ -18,12 +15,7 @@
 
 
 int main() {
-	AVLTest();
-	
-	//TreeTest();
-	//ThreadTree_Test();
-	//Huffman::Test();
-	//Huffman::Test1();
+	TreeTest();
 
 	//StaticList::Test();
 
