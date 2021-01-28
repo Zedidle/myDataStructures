@@ -142,7 +142,7 @@
     <ClCompile Include="Tree\AVL\AVLTree.cpp" />
     <ClCompile Include="Tree\AVL\AVLTreeNode.cpp" />
     <ClCompile Include="Tree\RedBlackTree.cpp" />
-    <ClCompile Include="Tree\TwoTreeTree.cpp" />
+    <ClCompile Include="Tree\TwoThreeTree.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Graph\AdjacencyMatrix.h" />
@@ -154,7 +154,7 @@
     <ClInclude Include="String\String.h" />
     <ClInclude Include="Tree\AVL\AVLTree.h" />
     <ClInclude Include="Tree\AVL\AVLTreeNode.h" />
-    <ClInclude Include="Tree\Heap.h" />
+    <ClInclude Include="Tree\BinaryTree.h" />
     <ClInclude Include="Tree\HuffmanTree.h" />
     <ClInclude Include="Tree\RedBlackTree.h" />
     <ClInclude Include="Tree\ThreadTree.h" />

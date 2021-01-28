@@ -6,8 +6,9 @@
 #include <fstream>
 #include <vector>
 
+#include "BinaryTree.h"
+
 #include "ThreadTree.h"
-#include "Heap.h"
 #include "AVL/AVLTree.h"
 #include "TwoThreeTree.h"
 #include "TwoThreeFourTree.h"
@@ -37,91 +38,29 @@ void AVLTest() {
 
 
 void TwoThreeTest() {
-	TwoThreeTree newtree;
-	string test;
-	int integerStart = 0;
-	int integer = 0;
-	string cap = "";
-	string operation = ""; //type of operation
-	int value = 0; //The value used for the operation
-	int temp;
+	TwoThreeTree ttTree;
+	int right_datas[] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14 ,15 ,16 ,17};
+	int mid_datas[] = { 2,5,7,10,11,1,6,12,8};
+	int left_datas[] = {14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1};
 
-	ifstream inFile;
-	inFile.open("Tree/input.txt", ios::in);
-	if (!inFile.is_open())
-	{
-		cout << "打开文件失败" << endl;
-		return;
+	//for (int d : right_datas) {
+	//	ttTree.Insert(d);
+	//	ttTree.Display();
+	//}
+
+	//for (int d : mid_datas) {
+	//	ttTree.Insert(d);
+	//	ttTree.Display();
+	//}
+
+	for (int d : left_datas) {
+		ttTree.Insert(d);
+		ttTree.Display();
 	}
-	ofstream OutFile("Tree/output.txt");
-	getline(inFile, test);
-
-	for (int i = 0; i < test.length(); i++) // reading the integers on the first line of input.txt
-	{
-		if (test[i] == ',')
-		{
-			cap = test.substr(integerStart, i - integerStart);
-			integer = stoi(cap);
-			integerStart = i + 1;
-			newtree.Insert(integer);
-		}
-	}
-
-	cap = test.substr(integerStart, test.length() - integerStart);
-	integer = stoi(cap);
-	newtree.Insert(integer);
-
-	while (inFile >> operation >> value) // reading operations and corresponding values
-	{
-		if (operation == "Insert")
-		{
-			OutFile << "inserted at position: " << newtree.Insert(value) << endl;
-		}
-
-		else if (operation == "Find")
-		{
-			temp = newtree.Find(value);
-
-			if (temp == 0)
-			{
-				OutFile << "Not Found" << endl;
-			}
-
-			else if (temp > 0)
-			{
-				OutFile << "Found: " << value << " is the " << temp << " element of the list" << endl;
-			}
-		}
-
-		else if (operation == "Delete")
-		{
-			temp = newtree.Delete(value);
-			OutFile << value << " is the " << temp << " element of the list, deleted" << endl;
-		}
-		else if (operation == "Selection")
-		{
-			temp = newtree.Selection(value);
-			OutFile << "The " << value << "th element in the tree is " << temp << endl;
-		}
-	}
-
-
-	vector<int> print; // putting every leaf node into a vector and output them to the output file
-	newtree.printTree(print);
-
-	OutFile << endl << "The leaf nodes of the tree:" << endl;
-	for (int i = 0; i < print.size(); i++)
-	{
-		OutFile << print[i] << " ";
-	}
-
-
-	inFile.close();
-	OutFile.close();
 }
 
 void TwoThreeFourTest() {
-	
+	TTF_Tree::Test();
 }
 
 
@@ -133,6 +72,12 @@ void RBTest() {
 	}
 
 	rbTree1.preorder();
+	
+	rbTree1.deleteValue(5);
+	cout << endl;
+	rbTree1.preorder();
+
+
 
 	//cin >> data;
 	//while (data != 0)
@@ -148,12 +93,13 @@ void RBTest() {
 }
 
 void TreeTest() {
-	//ThreadTree_Test();
-	//TreeHead::Test();
-	//AVLTest();
-	//TwoThreeTest();
-	//TwoThreeFourTest();
-	RBTest();
+	
+	//BinaryTree::Test();
 
+	//ThreadTree_Test();
+	//AVLTest();
+	TwoThreeTest();
+	//TwoThreeFourTest();
+	//RBTest();
 	//Huffman::Test();
 }

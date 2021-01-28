@@ -48,10 +48,10 @@
     <ClCompile Include="Tree\AVL\AVLTreeNode.cpp">
       <Filter>头文件\Tree\AVL</Filter>
     </ClCompile>
-    <ClCompile Include="Tree\TwoTreeTree.cpp">
+    <ClCompile Include="Tree\RedBlackTree.cpp">
       <Filter>头文件\Tree</Filter>
     </ClCompile>
-    <ClCompile Include="Tree\RedBlackTree.cpp">
+    <ClCompile Include="Tree\TwoThreeTree.cpp">
       <Filter>头文件\Tree</Filter>
     </ClCompile>
   </ItemGroup>
@@ -98,10 +98,10 @@
     <ClInclude Include="Tree\TwoThreeFourTree.h">
       <Filter>头文件\Tree</Filter>
     </ClInclude>
-    <ClInclude Include="Tree\Heap.h">
+    <ClInclude Include="Tree\RedBlackTree.h">
       <Filter>头文件\Tree</Filter>
     </ClInclude>
-    <ClInclude Include="Tree\RedBlackTree.h">
+    <ClInclude Include="Tree\BinaryTree.h">
       <Filter>头文件\Tree</Filter>
     </ClInclude>
   </ItemGroup>

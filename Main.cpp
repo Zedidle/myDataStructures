@@ -1,6 +1,6 @@
-#include "Tree/Tree.h"
-
 #include "List/StaticList.h"
+
+#include "Tree/Tree.h"
 
 #include "Stack/Calculator.h"
 #include "Stack/DoubleStack.h"
@@ -15,9 +15,9 @@
 
 
 int main() {
-	TreeTest();
+	//StaticListSpace::Test();
 
-	//StaticList::Test();
+	TreeTest();
 
 
 	// Stack
