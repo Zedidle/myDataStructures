@@ -183,16 +183,10 @@ int TwoThreeTree::Insert(int val) {
 	}
 
 	(*N)->parent = P;
-
 	if( (*N)->num < 3) return 1;
 	(*N)->makeChilds();
 
 	while(P != nullptr){
-		//Display();
-		//cout << "P: ";
-		//P->showVal();
-		//cout << "N: ";
-		//(*N)->showVal();
 		if (P->num == 1) {
 			if (P->fchild == *N){
 				P->upLeft();
@@ -242,7 +236,6 @@ int TwoThreeTree::_Remove(Node*& node, int val) {
 			N = &((*N)->fchild);
 		}
 		else {
-
 			if ((*N)->isLeaf()) {
 				if ((*N)->num == 2) {
 					if ((*N)->lval == val) { // 删除右值
@@ -269,6 +262,7 @@ int TwoThreeTree::_Remove(Node*& node, int val) {
 							}
 							else {
 								(*N)->lval = P->rval;
+								P->rval = P->lval;
 								P->rval = P->schild->rval;
 								P->schild->rval = MAX;
 								P->schild->num = 1;
@@ -282,12 +276,14 @@ int TwoThreeTree::_Remove(Node*& node, int val) {
 							}
 							else {
 								(*N)->lval = P->lval;
-								P->lval = P->schild->lval;
+								P->lval = P->rval;
+								P->rval = P->schild->lval;
 								P->schild->lval = P->schild->rval;
 								P->schild->rval = MAX;
 								P->schild->num = 1;
 							}}
 						else if (P->schild == *N) { // N 是 P 的第二个结点
+							
 							if (P->fchild->num == 1) {
 								P->schild = nullptr;
 								P->downLeft();
@@ -300,6 +296,7 @@ int TwoThreeTree::_Remove(Node*& node, int val) {
 								P->fchild->num = 1;
 							}
 						}
+						break;
 					}else if (P->num == 1) {
 						if (P->fchild == *N) { // N 是 P 的第一个结点
 							if (P->schild->num == 1) {
@@ -312,6 +309,7 @@ int TwoThreeTree::_Remove(Node*& node, int val) {
 								P->schild->lval = P->schild->rval;
 								P->schild->rval = MAX;
 								P->schild->num = 1;
+								break;
 							}
 						}
 						else if (P->schild == *N) { // N 是 P 的第二个结点
@@ -324,38 +322,56 @@ int TwoThreeTree::_Remove(Node*& node, int val) {
 								P->lval = P->fchild->rval;
 								P->fchild->rval = MAX;
 								P->fchild->num = 1;
+								break;
 							}
 						}
 					}
+
 					Node* PP = P->parent;
-					if (PP != nullptr) {
+					while (PP != nullptr) {
 						if (PP->num == 2) {
 							if (PP->fchild == P) {
 								PP->downLeft();
-								P->upRight();
+								PP->fchild->upRight();
 							}
 							else if (PP->schild == P) {
 								PP->downRight();
-								P->upRight();
+								PP->schild->upRight();
 							}
 							else if (PP->tchild == P) {
 								PP->downRight();
-								P->upLeft();
+								PP->schild->upLeft();
 							}
+							break;
 						}
-						else if (PP->num == 1) {
+						else{
 							if (PP->fchild == P) {
-								PP->upRight();
+								if (PP->schild->num == 1) {
+									PP->upRight();
+								}
+								else {
+									PP->schild->downLeft();
+									PP->upRight();
+									PP->cutMid();
+								}
 							}
 							else if (PP->schild == P) {
-								PP->upLeft();
+								if (PP->fchild->num == 1) {
+									PP->upLeft();
+								}
+								else {
+									PP->fchild->downRight();
+									PP->upLeft();
+									PP->cutMid();
+								}
 							}
+							PP = PP->parent;
+							P = P->parent;
 						}
 					}
 				}
 			}
 			else { // 非叶子结点
-				cout << "no-leaf " << endl;
 				if ((*N)->lval == val) {
 					Node* M = minValueNode((*N)->schild);
 					(*N)->lval = M->lval;

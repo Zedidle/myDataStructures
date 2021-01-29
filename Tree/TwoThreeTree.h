@@ -61,25 +61,29 @@ public:
 
 	void Display() {
 		printf("\n");
+		int size = 0;
 		if (root != nullptr)
-			Display(root, 1, 0);
+			Display(root, 1, 0, size);
 		else
 			printf("Empty");
+		cout << endl << "size: " << size << endl << endl;
 		printf("\n");
 	}
 
-	void Display(Node* const& cur, int depth, int state) {  // state: 1 -> left, 2 -> mid, 3 -> right, 0 -> root
+	void Display(Node* const& cur, int depth, int state, int& size) {  // state: 1 -> left, 2 -> mid, 3 -> right, 0 -> root
 		if (cur == nullptr) return;
-		Display(cur->tchild, depth + 1, 3);
-		Display(cur->schild, depth + 1, 2);
+		Display(cur->tchild, depth + 1, 3, size);
+		Display(cur->schild, depth + 1, 2, size);
 		for (int i = 0; i < depth; i++)
 			printf("    ");
+		size = size + 1;
 		cout << "[" << cur->lval ;
 		if (cur->rval != MAX) {
 			cout << ", " << cur->rval;
+			size = size + 1;
 		}
 		cout << "]" << endl;
-		Display(cur->fchild, depth + 1, 1);
+		Display(cur->fchild, depth + 1, 1, size);
 	}
 
 
