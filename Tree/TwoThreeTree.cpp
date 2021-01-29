@@ -156,7 +156,7 @@ int TwoThreeTree::Insert(int val) {
 		root = new Node(val);
 		return 1;
 	}
-	//cout << endl << "ins: " << val << endl;
+	cout << endl << "ins: " << val << endl;
 	Node** N = &root;
 	Node* P = nullptr;
 	while ((*N) != nullptr) {
@@ -322,6 +322,8 @@ int TwoThreeTree::_Remove(Node*& node, int val) {
 								P->lval = P->fchild->rval;
 								P->fchild->rval = MAX;
 								P->fchild->num = 1;
+								cout << "kkk:" << endl;
+								Display();
 								break;
 							}
 						}
@@ -397,8 +399,7 @@ int TwoThreeTree::Selection(int k) {
 
 TwoThreeTree::Node* TwoThreeTree::minValueNode(Node* node)
 {
-	if( node == nullptr ) return nullptr;
-	if (node->fchild != nullptr) {
+	while (node->fchild != nullptr) {
 		node = node->fchild;
 	}
 	return node;

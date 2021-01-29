@@ -9,7 +9,7 @@ using namespace std;
 #include <vector>
 
 #define MAX 255
-#define MIN 0
+#define MIN -1
 
 
 class TwoThreeTree

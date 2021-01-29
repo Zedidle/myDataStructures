@@ -5,6 +5,7 @@
 #include <string>
 #include <fstream>
 #include <vector>
+#include "numeric"
 
 #include "BinaryTree.h"
 
@@ -39,14 +40,20 @@ void AVLTest() {
 
 void TwoThreeTest() {
 	TwoThreeTree ttTree;
-	int right_datas[] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14 ,15 ,16 ,17, 56,43,23,65,87,26,87,66,54};
+	vector<short> random_datas(30);
+	iota(random_datas.begin(), random_datas.end(), 0);
+	//for (auto d : random_datas) cout << d <<" "; cout << endl;
+	random_shuffle(random_datas.begin(), random_datas.end());
+	for (auto d : random_datas) cout << d << " "; cout << endl;
+
+	int right_datas[] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14 ,15 ,16 ,17, 56, 43, 23, 65, 87, 26, 87, 66, 54};
 	int mid_datas[] = { 2,5,7,10,11,1,6,12,8};
 	int left_datas[] = {14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1};
 
-	for (int d : right_datas) {
-		ttTree.Insert(d);
-		//ttTree.Display();
-	}
+	//for (int d : right_datas) {
+	//	ttTree.Insert(d);
+	//	ttTree.Display();
+	//}
 
 	//for (int d : mid_datas) {
 	//	ttTree.Insert(d);
@@ -59,8 +66,15 @@ void TwoThreeTest() {
 	//}
 
 
+	for (int d : random_datas) {
+		ttTree.Insert(d);
+		ttTree.Display();
+	}
+
+	// ============================================== Test ===================================================
+
 	ttTree.Display();
-	for (int d : right_datas) {
+	for (int d : random_datas) {
 		ttTree.Remove(d);
 		ttTree.Display();
 	}
