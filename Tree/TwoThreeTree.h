@@ -41,6 +41,7 @@ class TwoThreeTree
 		void downRight(); // 下放左边
 		void cutMid(); // 从中间切开
 
+		void removeRval();
 	};
 
 public:

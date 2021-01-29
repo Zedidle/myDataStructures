@@ -29,6 +29,7 @@ bool TwoThreeTree::Node::isLeaf() {
 	return fchild == nullptr && schild == nullptr && tchild == nullptr;
 }
 
+// 适用于：当叶子结点成为 3结点时，将left和right下降，留下mid
 void TwoThreeTree::Node::makeChilds() {
 	if (num < 3) return;
 	if (mval < lval) {
@@ -46,6 +47,7 @@ void TwoThreeTree::Node::makeChilds() {
 	num = 1;
 }
 
+// 适用于：左低右高的2结点，使其成为3结点
 void TwoThreeTree::Node::upLeft() {
 	if(num != 1) return;
 	rval = lval;
@@ -60,6 +62,8 @@ void TwoThreeTree::Node::upLeft() {
 	num = 2;
 	delete F;
 }
+
+// 适用于：左高右低的2结点，使其成为3结点
 void TwoThreeTree::Node::upRight() {
 	if (num != 1) return;
 	Node *S = schild;
@@ -71,6 +75,8 @@ void TwoThreeTree::Node::upRight() {
 	num = 2;
 	delete S;
 }
+
+// 适用于：（左高 < 中高 = 右高 ）或（左高 = 右高 > 中高）的3结点，使其成为2结点
 void TwoThreeTree::Node::downLeft() {
 	if (num != 2) return;
 	Node* L = new Node(lval);
@@ -87,6 +93,8 @@ void TwoThreeTree::Node::downLeft() {
 	rval = MAX;
 	num = 1;
 }
+
+// 适用于：（左高 = 中高 > 右高）或（左高 = 右高 > 中高）的3结点，使其成为2结点
 void TwoThreeTree::Node::downRight() {
 	if (num != 2) return;
 	Node* R = new Node(rval);
@@ -101,6 +109,8 @@ void TwoThreeTree::Node::downRight() {
 	rval = MAX;
 	num = 1;
 }
+
+// 适用于：左高 = 右高 < 中高 的3结点，使其成为2结点
 void TwoThreeTree::Node::cutMid() {
 	if (num != 2) return;
 	Node* L = new Node(lval);
@@ -128,13 +138,10 @@ void TwoThreeTree::Node::cutMid() {
 	num = 1;
 }
 
-
-
-
-
-
-
-
+void TwoThreeTree::Node::removeRval(){
+	rval = MAX;
+	num = 1;
+}
 
 TwoThreeTree::TwoThreeTree(){
 	root = nullptr;
@@ -235,157 +242,148 @@ int TwoThreeTree::_Remove(Node*& node, int val) {
 		else if (val < (*N)->lval) {
 			N = &((*N)->fchild);
 		}
-		else {
-			if ((*N)->isLeaf()) {
-				if ((*N)->num == 2) {
-					if ((*N)->lval == val) { // 删除右值
-						(*N)->lval = (*N)->rval;
-						(*N)->rval = MAX;
-					}
-					else if ((*N)->rval == val) {
-						(*N)->rval = MAX;
-					}
-					(*N)->num = 1;
+		else if (!(*N)->isLeaf()) {
+			if ((*N)->lval == val) {
+				Node* M = minValueNode((*N)->schild);
+				(*N)->lval = M->lval;
+				_Remove(M, M->lval);
+			}
+			else {
+				Node* M = minValueNode((*N)->tchild);
+				(*N)->rval = M->lval;
+				_Remove(M, M->lval);
+			}
+		} else {
+			if ((*N)->num == 2) {
+				if ((*N)->lval == val) { // 删除右值
+					(*N)->lval = (*N)->rval;
+					(*N)->rval = MAX;
 				}
-				else if ((*N)->lval == val) { 	
-					if ((*N) == root) {
-						root = nullptr;
-						break;
+				else if ((*N)->rval == val) {
+					(*N)->rval = MAX;
+				}
+				(*N)->num = 1;
+			}
+			else if ((*N)->lval == val) {
+
+				if ((*N) == root) {
+					root = nullptr;
+					return 1;
+				}
+
+				if (P->num == 2){
+					if (P->tchild == *N) {
+						if (P->schild->num == 1) {
+							P->tchild = nullptr;
+							P->downRight();
+							P->schild->upLeft();
+						}
+						else {
+							(*N)->lval = P->rval;
+							P->rval = P->schild->rval;
+							P->schild->removeRval();
+						}
 					}
-
-					if (P->num == 2){
-						if (P->tchild == *N) {
-							if (P->schild->num == 1) {
-								P->tchild = nullptr;
-								P->downRight();
-								P->schild->upLeft();
-							}
-							else {
-								(*N)->lval = P->rval;
-								P->rval = P->schild->rval;
-								P->schild->rval = MAX;
-								P->schild->num = 1;
-							}
+					else if (P->schild == *N) {
+						if (P->fchild->num == 1) {
+							P->schild = nullptr;
+							P->downLeft();
+							P->fchild->upLeft();
 						}
-						else if (P->schild == *N) {
-							if (P->fchild->num == 1) {
-								P->schild = nullptr;
-								P->downLeft();
-								P->fchild->upLeft();
-							}
-							else {
-								(*N)->lval = P->lval;
-								P->lval = P->fchild->rval;
-								P->fchild->rval = MAX;
-								P->fchild->num = 1;
-							}
+						else {
+							(*N)->lval = P->lval;
+							P->lval = P->fchild->rval;
+							P->fchild->removeRval();
 						}
-						else  if(P->fchild == *N) {
-							if (P->schild->num == 1) {
-								P->fchild = nullptr;
-								P->downLeft();
-								P->fchild->upRight();
-							}
-							else {
-								(*N)->lval = P->lval;
-								P->lval = P->schild->lval;
-								P->schild->lval = P->schild->rval;
-								P->schild->rval = MAX;
-								P->schild->num = 1;
-							}
+					}
+					else  if(P->fchild == *N) {
+						if (P->schild->num == 1) {
+							P->fchild = nullptr;
+							P->downLeft();
+							P->fchild->upRight();
 						}
-
-						break;
-					}else if (P->num == 1) {
-						if (P->fchild == *N) {
-							if (P->schild->num == 1) {
-								P->fchild = nullptr;
-								P->upRight();
-							}
-							else {
-								(*N)->lval = P->lval;
-								P->lval = P->schild->lval;
-								P->schild->lval = P->schild->rval;
-								P->schild->rval = MAX;
-								P->schild->num = 1;
-								break;
-							}
-						}
-						else if (P->schild == *N) {
-							if (P->fchild->num == 1) {
-								P->schild = nullptr;
-								P->upLeft();
-							}
-							else {
-								(*N)->lval = P->lval;
-								P->lval = P->fchild->rval;
-								P->fchild->rval = MAX;
-								P->fchild->num = 1;
-								break;
-							}
+						else {
+							(*N)->lval = P->lval;
+							P->lval = P->schild->lval;
+							P->schild->lval = P->schild->rval;
+							P->schild->removeRval();
 						}
 					}
 
-					Node* PP = P->parent;
-					while (PP != nullptr) {
-						if (PP->num == 2) {
-							if (PP->fchild == P) {
-								PP->downLeft();
-								PP->fchild->upRight();
-							}
-							else if (PP->schild == P) {
-								PP->downRight();
-								PP->schild->upRight();
-							}
-							else if (PP->tchild == P) {
-								PP->downRight();
-								PP->schild->upLeft();
-							}
-							break;
+					return 1;
+				}
+
+				if (P->fchild == *N) {
+					if (P->schild->num == 1) {
+						P->fchild = nullptr;
+						P->upRight();
+					}
+					else {
+						(*N)->lval = P->lval;
+						P->lval = P->schild->lval;
+						P->schild->lval = P->schild->rval;
+						P->schild->removeRval();
+						return 1;
+					}
+				}
+				else if (P->schild == *N) {
+					if (P->fchild->num == 1) {
+						P->schild = nullptr;
+						P->upLeft();
+					}
+					else {
+						(*N)->lval = P->lval;
+						P->lval = P->fchild->rval;
+						P->fchild->removeRval();
+						return 1;
+					}
+				}
+
+				Node* PP = P->parent;
+				while (PP != nullptr) {
+					if (PP->num == 2) {
+						if (PP->fchild == P) {
+							PP->downLeft();
+							PP->fchild->upRight();
 						}
-						else{
-							if (PP->fchild == P) {
-								if (PP->schild->num == 1) {
-									PP->upRight();
-								}
-								else {
-									PP->schild->downLeft();
-									PP->upRight();
-									PP->cutMid();
-								}
-							}
-							else if (PP->schild == P) {
-								if (PP->fchild->num == 1) {
-									PP->upLeft();
-								}
-								else {
-									PP->fchild->downRight();
-									PP->upLeft();
-									PP->cutMid();
-								}
-							}
-							PP = PP->parent;
-							P = P->parent;
+						else if (PP->schild == P) {
+							PP->downRight();
+							PP->schild->upRight();
 						}
+						else if (PP->tchild == P) {
+							PP->downRight();
+							PP->schild->upLeft();
+						}
+						return 1;
+					}
+					else{
+						if (PP->fchild == P) {
+							if (PP->schild->num == 1) {
+								PP->upRight();
+							}
+							else {
+								PP->schild->downLeft();
+								PP->upRight();
+								PP->cutMid();
+							}
+						}
+						else if (PP->schild == P) {
+							if (PP->fchild->num == 1) {
+								PP->upLeft();
+							}
+							else {
+								PP->fchild->downRight();
+								PP->upLeft();
+								PP->cutMid();
+							}
+						}
+						PP = PP->parent;
+						P = P->parent;
 					}
 				}
 			}
-			else { // 非叶子结点
-				if ((*N)->lval == val) {
-					Node* M = minValueNode((*N)->schild);
-					(*N)->lval = M->lval;
-					_Remove(M, M->lval);
-				}
-				else {
-					Node* M = minValueNode((*N)->tchild);
-					(*N)->rval = M->lval;
-					_Remove(M, M->lval);
-				}
-			}
-			break;
 		}
 	}
-
 	return 1;
 }
 
