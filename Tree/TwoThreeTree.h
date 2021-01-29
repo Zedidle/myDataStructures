@@ -9,6 +9,8 @@ using namespace std;
 #include <vector>
 
 #define MAX 255
+//#define MAX 32766
+//#define MAX 32765
 #define MIN -1
 
 

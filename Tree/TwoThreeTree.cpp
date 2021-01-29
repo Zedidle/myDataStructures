@@ -262,28 +262,12 @@ int TwoThreeTree::_Remove(Node*& node, int val) {
 							}
 							else {
 								(*N)->lval = P->rval;
-								P->rval = P->lval;
 								P->rval = P->schild->rval;
 								P->schild->rval = MAX;
 								P->schild->num = 1;
 							}
 						}
-						else  if(P->fchild == *N) { // N 是 P 的第一个结点
-							if (P->schild->num == 1) {
-								P->fchild = nullptr;
-								P->downLeft();
-								P->fchild->upRight();
-							}
-							else {
-								(*N)->lval = P->lval;
-								P->lval = P->rval;
-								P->rval = P->schild->lval;
-								P->schild->lval = P->schild->rval;
-								P->schild->rval = MAX;
-								P->schild->num = 1;
-							}}
-						else if (P->schild == *N) { // N 是 P 的第二个结点
-							
+						else if (P->schild == *N) {
 							if (P->fchild->num == 1) {
 								P->schild = nullptr;
 								P->downLeft();
@@ -296,9 +280,24 @@ int TwoThreeTree::_Remove(Node*& node, int val) {
 								P->fchild->num = 1;
 							}
 						}
+						else  if(P->fchild == *N) {
+							if (P->schild->num == 1) {
+								P->fchild = nullptr;
+								P->downLeft();
+								P->fchild->upRight();
+							}
+							else {
+								(*N)->lval = P->lval;
+								P->lval = P->schild->lval;
+								P->schild->lval = P->schild->rval;
+								P->schild->rval = MAX;
+								P->schild->num = 1;
+							}
+						}
+
 						break;
 					}else if (P->num == 1) {
-						if (P->fchild == *N) { // N 是 P 的第一个结点
+						if (P->fchild == *N) {
 							if (P->schild->num == 1) {
 								P->fchild = nullptr;
 								P->upRight();
@@ -312,7 +311,7 @@ int TwoThreeTree::_Remove(Node*& node, int val) {
 								break;
 							}
 						}
-						else if (P->schild == *N) { // N 是 P 的第二个结点
+						else if (P->schild == *N) {
 							if (P->fchild->num == 1) {
 								P->schild = nullptr;
 								P->upLeft();
@@ -322,8 +321,6 @@ int TwoThreeTree::_Remove(Node*& node, int val) {
 								P->lval = P->fchild->rval;
 								P->fchild->rval = MAX;
 								P->fchild->num = 1;
-								cout << "kkk:" << endl;
-								Display();
 								break;
 							}
 						}
@@ -385,7 +382,6 @@ int TwoThreeTree::_Remove(Node*& node, int val) {
 					_Remove(M, M->lval);
 				}
 			}
-
 			break;
 		}
 	}
