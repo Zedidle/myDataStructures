@@ -39,7 +39,7 @@ void AVLTest() {
 
 void TwoThreeTest() {
 	TwoThreeTree ttTree;
-	int right_datas[] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14 ,15 ,16 ,17};
+	int right_datas[] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14 ,15 ,16 ,17, 56,43,23,65,87,26,87,65,54};
 	int mid_datas[] = { 2,5,7,10,11,1,6,12,8};
 	int left_datas[] = {14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1};
 
@@ -48,15 +48,23 @@ void TwoThreeTest() {
 	//	ttTree.Display();
 	//}
 
-	//for (int d : mid_datas) {
+	for (int d : mid_datas) {
+		ttTree.Insert(d);
+		//ttTree.Display();
+	}
+
+	//for (int d : left_datas) {
 	//	ttTree.Insert(d);
 	//	ttTree.Display();
 	//}
 
-	for (int d : left_datas) {
-		ttTree.Insert(d);
+
+	ttTree.Display();
+	for (int d : mid_datas) {
+		ttTree.Remove(d);
 		ttTree.Display();
 	}
+
 }
 
 void TwoThreeFourTest() {
@@ -76,7 +84,6 @@ void RBTest() {
 	rbTree1.deleteValue(5);
 	cout << endl;
 	rbTree1.preorder();
-
 
 
 	//cin >> data;

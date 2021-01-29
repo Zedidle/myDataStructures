@@ -9,6 +9,7 @@ using namespace std;
 #include <vector>
 
 #define MAX 255
+#define MIN 0
 
 
 class TwoThreeTree
@@ -28,13 +29,7 @@ class TwoThreeTree
 		Node* schild; // second child of the node
 		Node* tchild; // Third child of the node
 
-		void showVal() {
-			cout << "[" << lval;
-			if (rval != MAX) {
-				cout << ", " << rval;
-			}
-			cout << "]" << endl;
-		}
+		void showVal();
 
 		bool isLeaf();
 		void makeChilds();
@@ -57,10 +52,11 @@ public:
 
 	int Insert(int val); // insert a node into the tree, if inserted returns true, if already existed, returns false
 
-	int Delete(int val); // remove the value from the tree, if removed sucesssfully, return true, else return false
+	int Remove(int val); // remove the value from the tree, if removed sucesssfully, return true, else return false
 
 	int Selection(int k); // return the k smallest element in the tree'
 
+	Node* minValueNode(Node* node);
 
 
 	void Display() {
@@ -85,5 +81,9 @@ public:
 		cout << "]" << endl;
 		Display(cur->fchild, depth + 1, 1);
 	}
+
+
+private:
+	int _Remove(Node*& node, int val); // remove the value from the tree, if removed sucesssfully, return true, else return false
 
 };
