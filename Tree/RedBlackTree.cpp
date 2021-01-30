@@ -105,7 +105,8 @@ void RBTree::fixInsertRBTree(Node* N) {
 		PP = P->parent;
 		Uncle = PP->left == P ? PP->right : PP->left;
 
-		if ((Uncle == nullptr) || (Uncle->color == BLACK)) {
+		// 因此，导致双红冲突时，只有两种状况：
+		if ((Uncle == nullptr) || (Uncle->color == BLACK)) {  // 1，叔叔结点为空或为黑色，旋转调整之后直接终结；
 			if (PP->left == Uncle) {
 				if (P->left == N) {
 					swap(PP->color, N->color);
@@ -123,13 +124,13 @@ void RBTree::fixInsertRBTree(Node* N) {
 			swap(PP->color, P->color);
 			break;
 		}
-		else if (getColor(Uncle) == RED) {
-			setColor(PP, RED);
-			setColor(P, BLACK);
-			setColor(Uncle, BLACK);
-			N = PP;
-			P = PP->parent;
-		}
+
+		// 2. 叔叔结点为红色，直接将红色提级，进入下一轮循环；
+		setColor(PP, RED);
+		setColor(P, BLACK);
+		setColor(Uncle, BLACK);
+		N = PP;
+		P = PP->parent;
 	}
 
 	setColor(root, BLACK);
