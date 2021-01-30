@@ -1,45 +1,75 @@
-
 #ifndef RED_BLACK_TREE_RBTREE_H
 #define RED_BLACK_TREE_RBTREE_H
-
+using namespace std;
 enum Color { RED, BLACK, DOUBLE_BLACK };
 
 
+#define MAX 255
+#define MIN -1
 
 class RBTree
 {
 private:
 	struct Node
 	{
-		int data;
+		int val;
 		int color;
 		Node* left, * right, * parent;
 
 		explicit Node(int);
+
 	};
 
 	Node* root;
 protected:
-	void rotateLeft(Node*&);
-	void rotateRight(Node*&);
-	void fixInsertRBTree(Node*&);
-	void fixDeleteRBTree(Node*&);
-	void inorderBST(Node*&);
-	void preorderBST(Node*&);
 	int getColor(Node*&);
 	void setColor(Node*&, int);
+	void rotateLeft(Node*&);
+	void rotateRight(Node*&);
+
+	void fixInsertRBTree(Node*);
+	void fixRemoveRBTree(Node*&);
+
 	Node* minValueNode(Node*&);
 	Node* maxValueNode(Node*&);
-	Node* insertBST(Node*&, Node*&);
-	Node* deleteBST(Node*&, int);
 	int getBlackHeight(Node*);
 public:
 	RBTree();
-	void insertValue(int);
-	void deleteValue(int);
-	void merge(RBTree);
-	void inorder();
-	void preorder();
+	void Insert(int);
+	void Remove(int);
+	void Merge(RBTree);
+
+
+
+	void Display() {
+		printf("\n");
+		int size = 0;
+		if (root != nullptr)
+			Display(root, 1, 0, size);
+		else
+			printf("Empty");
+		cout << endl << "size: " << size << endl << endl;
+		printf("\n");
+	}
+
+	void Display(Node* const& cur, int depth, int state, int& size) {  // state: 1 -> left, 2 -> right,  0 -> root
+		if (cur == nullptr) return;
+		Display(cur->right, depth + 1, 2, size);
+		for (int i = 0; i < depth; i++)
+			printf("    ");
+		size = size + 1;
+		if (state == 2) {
+			cout << "┌--";
+		}
+		else if (state == 1) {
+			cout << "└--";
+		}
+		cout << "[" << cur->val;
+		if (cur->color == RED) cout << "°";
+		cout << "]" << endl;
+		Display(cur->left, depth + 1, 1, size);
+	}
+
 };
 
 

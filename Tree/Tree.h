@@ -85,41 +85,31 @@ void TwoThreeFourTest() {
 }
 
 
+
+
 void RBTest() {
+	vector<short> random_datas(32);
+	iota(random_datas.begin(), random_datas.end(), MIN + 1);
+	//for (auto d : random_datas) cout << d <<" "; cout << endl;
+	random_shuffle(random_datas.begin(), random_datas.end());
+
 	RBTree rbTree1, rbTree2;
-	int datas[] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
-	for (int d : datas) {
-		rbTree1.insertValue(d);
+	for (int d : random_datas) {
+		rbTree1.Insert(d);
+		rbTree1.Display();
 	}
-
-	rbTree1.preorder();
 	
-	rbTree1.deleteValue(5);
-	cout << endl;
-	rbTree1.preorder();
-
-
-	//cin >> data;
-	//while (data != 0)
-	//{
-	//	rbTree2.insertValue(data);
-	//	cin >> data;
-	//}
-
-	//rbTree2.preorder();
-
-	//rbTree1.merge(rbTree2);
-	//rbTree1.preorder();
+	//rbTree1.Display();
 }
 
-void TreeTest() {
-	
-	//BinaryTree::Test();
 
+
+void TreeTest() {
+	//BinaryTree::Test();
 	//ThreadTree_Test();
 	//AVLTest();
-	TwoThreeTest();
+	//TwoThreeTest();
 	//TwoThreeFourTest();
-	//RBTest();
+	RBTest();
 	//Huffman::Test();
 }
