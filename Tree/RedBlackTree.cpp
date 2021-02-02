@@ -224,12 +224,7 @@ void RBTree::fixRemoveRBTree(Node*P, Node* N) {
 				W = P->right;
 			}
 
-			if (W == nullptr) {
-				cout << "a2" << endl;
-				P->color = BLACK;
-				N = P;
-			}
-			else if (getColor(W->left) == BLACK && getColor(W->right) == BLACK) { // ②
+			if (getColor(W->left) == BLACK && getColor(W->right) == BLACK) { // ②
 				cout << "a2.1" << endl;
 				int pColor = P->color;
 				P->color = BLACK;
@@ -267,12 +262,7 @@ void RBTree::fixRemoveRBTree(Node*P, Node* N) {
 				W = P->left;
 			}
 
-			if (W == nullptr) {
-				cout << "b2" << endl;
-				P->color = BLACK;
-				N = P;
-			}
-			else if (getColor(W->left) == BLACK && getColor(W->right) == BLACK) { // ②
+			if (getColor(W->left) == BLACK && getColor(W->right) == BLACK) { // ②
 				cout << "b2.1" << endl;
 				int pColor = P->color;
 				P->color = BLACK;
