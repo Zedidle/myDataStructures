@@ -90,15 +90,22 @@ void TwoThreeFourTest() {
 void RBTest() {
 	vector<short> random_datas(32);
 	iota(random_datas.begin(), random_datas.end(), MIN + 1);
-	//for (auto d : random_datas) cout << d <<" "; cout << endl;
 	random_shuffle(random_datas.begin(), random_datas.end());
+	for (auto d : random_datas) cout << d << " "; cout << endl;
+
 
 	RBTree rbTree1, rbTree2;
 	for (int d : random_datas) {
 		rbTree1.Insert(d);
+		//rbTree1.Display();
+	}
+	rbTree1.Display();
+	for (int d : random_datas) {
+		rbTree1.Remove(d);
 		rbTree1.Display();
 	}
-	
+
+
 	//rbTree1.Display();
 }
 

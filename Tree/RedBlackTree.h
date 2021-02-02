@@ -18,6 +18,10 @@ private:
 
 		explicit Node(int);
 
+		bool isLeaf() {
+			return left == nullptr && right == nullptr;
+		}
+
 	};
 
 	Node* root;
@@ -28,13 +32,14 @@ protected:
 	void rotateRight(Node*&);
 
 	void fixInsertRBTree(Node*);
-	void fixRemoveRBTree(Node*&);
+	void fixRemoveRBTree(Node*, Node*);
 
 	Node* minValueNode(Node*&);
 	Node* maxValueNode(Node*&);
 	int getBlackHeight(Node*);
 public:
 	RBTree();
+	void Transplant(Node*, Node*);
 	void Insert(int);
 	void Remove(int);
 	void Merge(RBTree);
@@ -70,6 +75,9 @@ public:
 		Display(cur->left, depth + 1, 1, size);
 	}
 
+
+	private:
+		void _Remove(Node* N, int val);
 };
 
 
