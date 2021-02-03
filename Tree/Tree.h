@@ -88,7 +88,7 @@ void TwoThreeFourTest() {
 
 
 void RBTest() {
-	vector<short> random_datas(32);
+	vector<short> random_datas(64);
 	iota(random_datas.begin(), random_datas.end(), MIN + 1);
 	random_shuffle(random_datas.begin(), random_datas.end());
 	for (auto d : random_datas) cout << d << " "; cout << endl;

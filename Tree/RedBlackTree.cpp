@@ -72,27 +72,10 @@ void RBTree::rotateRight(Node*& ptr) {
 }
 
 
-void RBTree::Transplant(Node* N, Node* T)
-{	
-	if (N->parent == nullptr) {
-		root = T;
-	}
-	else if(N == N->parent->left){
-		N->parent->left = T;
-	}
-	else {
-		N->parent->right = T;
-	}
-	if (T != nullptr) {
-		T->parent = N->parent;
-	}
-}
-
-
 void RBTree::Insert(int val) {
 	//cout << "ins val:" << val << endl;
 	Node* node = new Node(val);
-	Node* P = nullptr;
+	Node* P = nullptr;  // 用于设置新结点的parent；
 	Node** N = &root;
 
 	if ((*N) == nullptr) {
@@ -123,6 +106,7 @@ void RBTree::fixInsertRBTree(Node* N) {
 
 		// 因此，导致双红冲突时，只有两种状况：
 		if (getColor(Uncle) == BLACK) {  // 1，叔叔结点为空或为黑色，旋转调整之后直接终结；
+			swap(PP->color, P->color);
 			if (PP->left == Uncle) {
 				if (P->left == N) {
 					swap(PP->color, N->color);
@@ -137,7 +121,6 @@ void RBTree::fixInsertRBTree(Node* N) {
 				}
 				rotateRight(PP);
 			}
-			swap(PP->color, P->color);
 			break;
 		}
 
@@ -212,80 +195,62 @@ void RBTree::_Remove(Node* z, int val){
 void RBTree::fixRemoveRBTree(Node*P, Node* N) {
 	Node* W = nullptr;
 	while (N != root && getColor(N) == BLACK) {
-		//Display();
 		if (N == P->left) {
-			cout << "toLeft" << endl;
 			W = P->right;
-			// ① W是红色，必定有黑色子结点，所以可以交换P 和 W的颜色，然后P左旋；
-			if (getColor(W) == RED) {
-				cout << "a1" << endl;
+			if (getColor(W) == RED) { // ① 状态迁移至 ②
 				swap(P->color, W->color);
 				rotateLeft(P);
 				W = P->right;
 			}
-
-			if (getColor(W->left) == BLACK && getColor(W->right) == BLACK) { // ②
-				cout << "a2.1" << endl;
+			if (getColor(W->left) == BLACK && getColor(W->right) == BLACK) {  // ② 
 				int pColor = P->color;
 				P->color = BLACK;
 				W->color = RED;
 				N = P;
+				W = P->right;
+
 				if (pColor == RED) break;
 			}
-			else {
-				cout << "a33" << endl;
-				// ③ RL: W 为黑色, WL 为红色, 交换W 及 WL的颜色，然后把W右旋，再刷新W；
-				if (getColor(W->left) == RED && getColor(W->right) == BLACK) {
-					cout << "a3" << endl;
-					W->left->color = P->color;
-					P->color = BLACK;
-					rotateRight(W);
-					rotateLeft(P);
-				}else if (getColor(W->right) == RED) { // ④ RR:  WR 为红色，将W的颜色给WR，P的颜色给W；然后P左旋
-					cout << "a4" << endl;
-					W->right->color = W->color;
-					W->color = P->color;
-					P->color = BLACK;
-					rotateLeft(P);
-				}
+			if (getColor(W->left) == RED && getColor(W->right) == BLACK) { // ③ RL 迁移至 ④
+				swap(W->left->color, W->color);
+				rotateRight(W);
+			}
+			if (getColor(W->right) == RED) { // ④ RR
+				W->right->color = W->color;
+				W->color = P->color;
+				P->color = BLACK;
+				rotateLeft(P);
 				break;
 			}
 		}
 		else {
-			cout << "toRight" << endl;
 			W = P->left;
-			// ① 
 			if (getColor(W) == RED) {
-				cout << "b1" << endl;
 				swap(P->color, W->color);
 				rotateRight(P);
 				W = P->left;
 			}
 
-			if (getColor(W->left) == BLACK && getColor(W->right) == BLACK) { // ②
-				cout << "b2.1" << endl;
+			if (getColor(W->left) == BLACK && getColor(W->right) == BLACK) {
 				int pColor = P->color;
 				P->color = BLACK;
 				W->color = RED;
 				N = P;
+				W = P->left;
+
 				if(pColor == RED) break;
 			}
-			else {
-				cout << "b33" << endl;
-				// ③
-				if (getColor(W->right) == RED && getColor(W->left) == BLACK) {
-					cout << "b3" << endl;
-					W->right->color = P->color;
-					P->color = BLACK;
-					rotateLeft(W);
-					rotateRight(P);
-				}else if (getColor(W->left) == RED) { // ④
-  					cout << "b4" << endl;
-					W->left->color = W->color;
-					W->color = P->color;
-					P->color = BLACK;
-					rotateRight(P);
-				}
+
+			if (getColor(W->right) == RED && getColor(W->left) == BLACK) {
+				swap(W->right->color, W->color);
+				rotateLeft(W);
+			}
+
+			if (getColor(W->left) == RED) {
+				W->left->color = W->color;
+				W->color = P->color;
+				P->color = BLACK;
+				rotateRight(P);
 				break;
 			}
 		}
@@ -327,10 +292,6 @@ int RBTree::getBlackHeight(Node* node) { // 获得以当前结点为根节点的
 }
 
 
-
 void RBTree::Merge(RBTree rbTree2) {
 
 }
-
-
-

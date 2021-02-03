@@ -39,7 +39,6 @@ protected:
 	int getBlackHeight(Node*);
 public:
 	RBTree();
-	void Transplant(Node*, Node*);
 	void Insert(int);
 	void Remove(int);
 	void Merge(RBTree);
