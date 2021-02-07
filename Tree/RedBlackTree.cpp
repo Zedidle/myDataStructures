@@ -14,36 +14,36 @@ RBTree::RBTree() {
 }
 
 int RBTree::getColor(Node*& node) {
-	if (node == nullptr)
+	if (node == nullptr) {
 		return BLACK;
-
+	}
 	return node->color;
+
 }
 
 void RBTree::setColor(Node*& node, int color) {
-	if (node == nullptr) return;
+	if(node == nullptr) return;
 	node->color = color;
 }
-
-
 
 
 void RBTree::rotateLeft(Node*& ptr) {
 	Node* R = ptr->right;
 	ptr->right = R->left;
-	if (ptr->right != nullptr) {
+	if (ptr->right != nullptr) { // 1 不要忽视nullptr的情况，边界条件很重要
 		ptr->right->parent = ptr;
 	}
-	R->parent = ptr->parent;
-	R->left = ptr;
 
-	if (R->parent == nullptr) {
+	R->left = ptr;
+	R->parent = ptr->parent;
+
+	if (R->parent == nullptr) { // 2 别漏了根节点
 		root = R;
 	}
-	else if (ptr->parent->left == ptr) {
+	else if (ptr == ptr->parent->left) {
 		ptr->parent->left = R;
 	}
-	else if (ptr->parent->right == ptr) {
+	else {
 		ptr->parent->right = R;
 	}
 
@@ -56,36 +56,36 @@ void RBTree::rotateRight(Node*& ptr) {
 	if (ptr->left != nullptr) {
 		ptr->left->parent = ptr;
 	}
-	L->parent = ptr->parent;
+
 	L->right = ptr;
+	L->parent = ptr->parent;
+
 	if (L->parent == nullptr) {
 		root = L;
 	}
-	else if (ptr->parent->left == ptr) {
-		ptr->parent->left = L;
-	}
-	else if (ptr->parent->right == ptr) {
+	else if (ptr == ptr->parent->right) {
 		ptr->parent->right = L;
+	}
+	else {
+		ptr->parent->left = L;
 	}
 
 	ptr->parent = L;
 }
 
 
-void RBTree::Insert(int val) {
-	//cout << "ins val:" << val << endl;
-	Node* node = new Node(val);
-	Node* P = nullptr;  // 用于设置新结点的parent；
-	Node** N = &root;
+void RBTree::Insert(int val) { // 3	整个insert 都要注意细节以及循环
+	cout << "ins val: " << val << endl;
+	Node* node = new Node(val), * P = nullptr, **N = &root;
 
-	if ((*N) == nullptr) {
-		(*N) = node;
-		setColor(node, BLACK);
+	if (root == nullptr) {
+		root = node;
+		setColor(root, BLACK);
 		return;
 	}
 
 	while (nullptr != *N) {
-		if((*N)->val == val) return; // 已经有值了，直接退出
+		if ((*N)->val == val) return; // 重复
 		P = *N;
 		N = (*N)->val > val ? &((*N)->left) : &((*N)->right);
 	}
@@ -99,44 +99,39 @@ void RBTree::Insert(int val) {
 void RBTree::fixInsertRBTree(Node* N) {
 	Node* P = N->parent, *PP = nullptr, *Uncle = nullptr;
 
-	while (P != nullptr && P->parent !=nullptr) {
-		if(P->color == BLACK) break;
+	while (getColor(P) == RED && P->parent!=nullptr) {
 		PP = P->parent;
-		Uncle = PP->left == P ? PP->right : PP->left;
+		Uncle = P == PP->left ? PP->right : PP->left;
 
-		// 因此，导致双红冲突时，只有两种状况：
-		if (getColor(Uncle) == BLACK) {  // 1，叔叔结点为空或为黑色，旋转调整之后直接终结；
-			swap(PP->color, P->color);
-			if (PP->left == Uncle) {
-				if (P->left == N) {
-					swap(PP->color, N->color);
-					rotateRight(P);
-				}
-				rotateLeft(PP);
-			}
-			else {
-				if (P->right == N) {
-					swap(PP->color, N->color);
+		if(getColor(Uncle) == BLACK){
+			swap(P->color, PP->color); // 8 因为P为RED，因此PP必然为BLACK，换色的目的在于旋转前后维持支点颜色
+			if (P == PP->left) {
+				if (N == P->right) {
+					swap(P->color, N->color);
 					rotateLeft(P);
 				}
 				rotateRight(PP);
 			}
+			else {
+				if (N == P->left) {
+					swap(P->color, N->color);
+					rotateRight(P);
+				}
+				rotateLeft(PP);
+			}
+
 			break;
 		}
 
-		// 2. 叔叔结点为红色，直接将红色提级，进入下一轮循环；
-		setColor(PP, RED);
-		setColor(P, BLACK);
 		setColor(Uncle, BLACK);
+		setColor(P, BLACK);
+		setColor(PP, RED);
 		N = PP;
-		P = PP->parent;
+		P = N->parent;
 	}
 
 	setColor(root, BLACK);
 }
-
-
-
 
 
 void RBTree::Remove(int val) {
@@ -144,48 +139,41 @@ void RBTree::Remove(int val) {
 	_Remove(root, val);
 }
 
-void RBTree::_Remove(Node* z, int val){
-	// 找到对应值的结点
-	while (z != nullptr) {
-		if (z->val == val) break;
-		z = z->val < val ? z->right : z->left;
+void RBTree::_Remove(Node* N, int val){ 
+	while (nullptr != N) { // 4 注意循环条件
+		if(N->val == val) break;
+		N = N->val > val ? N->left : N->right;
 	}
-	if (z == nullptr) return; // 找不到则跳出
+	if(N == nullptr) return;
 
-	Node* y = nullptr;
-	if (z->left) {
-		y = maxValueNode(z->left);
-		z->val = y->val;
-		_Remove(y, y->val);
+	if (N->left != nullptr || N->right != nullptr) { // 5 这样的||方式会让下面的代码简洁很多
+		Node* M = (N->left != nullptr) ? maxValueNode(N->left) : maxValueNode(N->right);
+		N->val = M->val;
+		_Remove(M, M->val);
 	}
-	else if (z->right) {
-		y = minValueNode(z->right);
-		z->val = y->val;
-		_Remove(y, y->val);
-	}
-	else{
-		Node* p = z-> parent;
-		if (z->color == RED) {
-			if (p->left == z) {
-				p->left = nullptr;
+	else {
+		Node* P = N->parent;
+		if (N->color == RED) { // 6 记得红色直接删除，自然推出else的黑色情况
+			if (P->left == N) {
+				P->left = nullptr;
 			}
 			else {
-				p->right = nullptr;
+				P->right = nullptr;
 			}
 		}
 		else {
-			if (p == nullptr) {
+			if (P == nullptr) {
 				root = nullptr;
 				return;
 			}
 
-			if (p->left == z) {
-				fixRemoveRBTree(p, p->left);
-				p->left = nullptr;
+			if (P->left == N) {
+				fixRemoveRBTree(P, P->left);
+				P->left = nullptr;
 			}
 			else {
-				fixRemoveRBTree(p, p->right);
-				p->right = nullptr;
+				fixRemoveRBTree(P, P->right);
+				P->right = nullptr;
 			}
 		}
 	}
@@ -194,28 +182,31 @@ void RBTree::_Remove(Node* z, int val){
 
 void RBTree::fixRemoveRBTree(Node*P, Node* N) {
 	Node* W = nullptr;
-	while (N != root && getColor(N) == BLACK) {
+	while (N != root && getColor(N) == BLACK) { // 9 注意理解循环条件
 		if (N == P->left) {
 			W = P->right;
-			if (getColor(W) == RED) { // ① 状态迁移至 ②
+			if (getColor(W) == RED) {
 				swap(P->color, W->color);
 				rotateLeft(P);
 				W = P->right;
 			}
-			if (getColor(W->left) == BLACK && getColor(W->right) == BLACK) {  // ② 
+
+			if (getColor(W->left) == BLACK && getColor(W->right) == BLACK) {
+				cout << "a2" << endl;
 				int pColor = P->color;
 				P->color = BLACK;
 				W->color = RED;
 				N = P;
-				W = P->right;
 
 				if (pColor == RED) break;
 			}
-			if (getColor(W->left) == RED && getColor(W->right) == BLACK) { // ③ RL 迁移至 ④
-				swap(W->left->color, W->color);
+
+			if (getColor(W->left) == RED && getColor(W->right) == BLACK) {
+				swap(W->color, W->left->color);
 				rotateRight(W);
 			}
-			if (getColor(W->right) == RED) { // ④ RR
+
+			if (getColor(W->right) == RED) {
 				W->right->color = W->color;
 				W->color = P->color;
 				P->color = BLACK;
@@ -225,24 +216,23 @@ void RBTree::fixRemoveRBTree(Node*P, Node* N) {
 		}
 		else {
 			W = P->left;
-			if (getColor(W) == RED) {
+			if (W->color == RED) {
 				swap(P->color, W->color);
 				rotateRight(P);
 				W = P->left;
 			}
 
-			if (getColor(W->left) == BLACK && getColor(W->right) == BLACK) {
+			if (getColor(W->right) == BLACK && getColor(W->left) == BLACK) {
 				int pColor = P->color;
 				P->color = BLACK;
 				W->color = RED;
 				N = P;
-				W = P->left;
 
-				if(pColor == RED) break;
+				if (pColor == RED) break;
 			}
 
 			if (getColor(W->right) == RED && getColor(W->left) == BLACK) {
-				swap(W->right->color, W->color);
+				swap(W->color, W->right->color);
 				rotateLeft(W);
 			}
 
@@ -254,44 +244,25 @@ void RBTree::fixRemoveRBTree(Node*P, Node* N) {
 				break;
 			}
 		}
-		P = N->parent;
+		P = N->parent; // 10 让循环继续下去有意义
 	}
+
 	root->color = BLACK;
 }
 
 
 RBTree::Node* RBTree::minValueNode(Node*& node) {
-	Node* ptr = node;
-
-	while (ptr->left != nullptr) {
-		ptr = ptr->left;
+	Node* t = node;
+	while (t->left != nullptr) {
+		t = t->left;
 	}
-
-	return ptr;
+	return t;
 }
 
 RBTree::Node* RBTree::maxValueNode(Node*& node) {
-	Node* ptr = node;
-
-	while (ptr->right != nullptr) {
-		ptr = ptr->right;
+	Node* t = node;
+	while (t->right != nullptr) {
+		t = t->right;
 	}
-
-	return ptr;
-}
-
-int RBTree::getBlackHeight(Node* node) { // 获得以当前结点为根节点的树的黑高
-	int blackheight = 0;
-	while (node != nullptr) {
-		if (getColor(node) == BLACK) {
-			blackheight++;
-		}
-		node = node->left;
-	}
-	return blackheight;
-}
-
-
-void RBTree::Merge(RBTree rbTree2) {
-
+	return t;
 }

@@ -105,7 +105,6 @@ void RBTest() {
 		rbTree1.Display();
 	}
 
-
 	//rbTree1.Display();
 }
 

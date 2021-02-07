@@ -36,12 +36,10 @@ protected:
 
 	Node* minValueNode(Node*&);
 	Node* maxValueNode(Node*&);
-	int getBlackHeight(Node*);
 public:
 	RBTree();
 	void Insert(int);
 	void Remove(int);
-	void Merge(RBTree);
 
 
 
