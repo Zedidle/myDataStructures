@@ -298,6 +298,7 @@ namespace AdjacencyMatrix {
 	// ============================================================
 	// 普利姆算法
 	void Test4() {
+		// -1 则表示两个点直接没有直接通路 
 		vector<vector<int>> G = {
 			{0, 10, -1, -1, -1, 11, -1, -1, -1},
 			{10, 0, 18, -1, -1, -1, 16, -1, 12},
@@ -338,7 +339,7 @@ namespace AdjacencyMatrix {
 			while (edges.size()) {
 				e = edges.front();
 				edges.erase(edges.begin(), edges.begin() + 1);
-				if (!record[e->j]) {  // 第 e->j 位置的点并没有加入结果集
+				if (!record[e->j]) {  // 第 e->j 位置的点并没有加入结果集， 避免形成环路
 					ans.push_back(e);
 					record[e->i] = record[e->j] = true;  // 将处于 e->i 和 e->j 位置的点加入结果集
 					i = e->j; // 将链接的下一个点，作为扩充点
@@ -415,6 +416,7 @@ namespace AdjacencyMatrix {
 		int n, m;
 		int total = 0;
 		for (int i = 0; i < numEdges; i++) {
+			// 这里就很妙，一股并查集的味道，也就是连通分量
 			n = FindParent(parent, edges[i]->begin);
 			m = FindParent(parent, edges[i]->end);
 			if (n != m) {
@@ -495,7 +497,7 @@ namespace AdjacencyMatrix {
 
 	}
 
-
+	// 图，起点，路径前驱记录，最短距离
 	void My_Dijkstra(MGraph G, int v0, Pathmatrix& P, ShortPathTable& D) {
 		vector<vector<int>> Gra = G.matirx;
 		int len = Gra.size();
@@ -503,28 +505,26 @@ namespace AdjacencyMatrix {
 		int v, k, w, m;
 		// 初始化
 		for (v = 0; v < len; v++) {
+			// 不能直接到达的路径前驱都设为起点，但是距离为无限大
 			D[v] = Gra[v0][v];
 			P[v] = v0;
 		}
 		F[v0] = true;
 
 
-		// 大循环
 		for (v = 1; v < len; v++) {
-			// 小循环1：获取当前最短边及其下标；
 			m = INFINITY;
 			for (w = 0; w < len; w++) {
-				if (!F[w] && D[w] < m) {
+				if (!F[w] && D[w] < m) {  // 优先选择没有走过，且当前距离最短的边
 					m = D[w];
 					k = w;
 				}
 			}
 			F[k] = true;
-			// 小循环2：刷新起点到所有点的最短距离及前驱；
 			for (w = 0; w < len; w++) {
-				if (!F[w] && (m + Gra[k][w] < D[w])) {  // 当前点有通路的话，就会刷新；
-					D[w] = m+Gra[k][w];
-					P[w] = k;
+				if (!F[w] && (m + Gra[k][w] < D[w])) {
+					D[w] = m+Gra[k][w]; // 刷新最短路径
+					P[w] = k; // 刷新路径前驱
 				}
 			}
 		}
@@ -561,6 +561,9 @@ namespace AdjacencyMatrix {
 
 
 
+
+
+	// 弗洛伊德算法
 	typedef vector<vector<int>> Pathmatrix2, ShortPathTable2;
 
 	void My_Floyd(MGraph G) {
@@ -606,7 +609,6 @@ namespace AdjacencyMatrix {
 			printf("\n");
 		}
 	}
-	// 弗洛伊德算法
 	void Test7() {
 		MGraph G(Gra);
 		My_Floyd(G);
@@ -647,22 +649,9 @@ namespace AdjacencyMatrix {
 		v = nullptr, s = nullptr;
 		delete v, s;
 
-		// 检查点集和编辑状态
-		//for (auto vex : tp_vexs) {
-		//	cout << "In:" << vex->In << ", " << "vex->data:" << vex->data << ": ";
-		//	s = vex->firstedge;
-		//	while (s != nullptr) {
-		//		cout << s->adjvex << " ";
-		//		s = s->next;
-		//	}
-		//	cout << endl;
-		//}
-
 		stack<TP_Vex*> stac;
 		for (auto &vex : tp_vexs) {
-			if (vex->In == 0) {
-				stac.push(vex);
-			}
+			if (vex->In == 0) stac.push(vex);	// 初始化
 		}
 		
 		vector<TP_Vex> path_result;
@@ -672,6 +661,7 @@ namespace AdjacencyMatrix {
 			s = v->firstedge;
 			stac.pop();
 			path_result.push_back(*v);
+
 			while (s != nullptr) {
 				i = s->adjvex;
 				tp_vexs[i]->In--;
@@ -688,7 +678,6 @@ namespace AdjacencyMatrix {
 			cout << p.data << " ";
 		}
 		cout << endl;
-
 	}
 
 	void Test8() {
